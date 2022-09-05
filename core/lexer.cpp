@@ -54,9 +54,7 @@ namespace stxa
                     if (std::count_if(number_str.begin(), number_str.end(), 
                        [&number_str](char &c) { return c == '.'; } ) > 1) 
                     {
-                        // Replace with logging system
-                        std::cout << "unable to parse number with two points." << std::endl;
-                        return Token::T_ERROR;
+                        return Token::T_ERROR;   // If find number with two and more points, i return error
                     }
 
                     m_num_value = std::strtod(number_str.c_str(), nullptr);

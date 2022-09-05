@@ -29,6 +29,9 @@ int main(int argc, char *argv[], char *envp[])
                 std::cout << "number found: " << std::setprecision(10) 
                           << obj.m_num_value << std::endl;
                 break;
+            case Token::T_ERROR:
+                std::cout << "unable to parse number with two and more points." << std::endl;
+                break;
             default:
                 std::cout << "operators not found." << std::endl;
                 break;
