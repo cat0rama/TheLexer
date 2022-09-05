@@ -5,6 +5,7 @@
 
 #include <string>
 #include <fstream>
+#include <vector>
 #include <unordered_map>
 
 namespace stxa
@@ -23,7 +24,7 @@ namespace stxa
     private:
         Lexer(const char* t_file_name);
 
-        ~Lexer() = default;
+        ~Lexer() noexcept = default;
     public:
     // Delete copy constructor and operator assigment
         Lexer(const Lexer&) = delete;
@@ -32,11 +33,12 @@ namespace stxa
     public:
         static auto getInstance(const char* t_file_name) -> Lexer&;
 
-        auto getToken() -> Token;
+        auto getNextToken() -> Token;
     public:
     // Variables for storing values ​​from a file of different types
         std::string m_identifier;
         double m_num_value;
+        Token m_current_token;
     private:
         std::ifstream m_fstream;
     };

@@ -7,12 +7,13 @@ namespace stxa
     {
         // End of file token
         T_EOF = -1,
-        T_NULL = 0,
+        T_ERROR = -2,
 
-        // End of file token
+        // Keywords
         T_FUNC = 1,
         T_EXTERN = 2,
         T_RETURN = 3,
+        T_NULL = 0,
 
         // Identifiers
         T_IDENTIFIER = 4,
