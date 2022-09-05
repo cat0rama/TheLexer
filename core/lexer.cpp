@@ -52,7 +52,7 @@ namespace stxa
                     } while (std::isdigit(last_char) || last_char == '.');
 
                     if (std::count_if(number_str.begin(), number_str.end(), 
-                       [&number_str](char &c) { return c == '.';} ) > 1) 
+                       [&number_str](char &c) { return c == '.'; } ) > 1) 
                     {
                         // Replace with logging system
                         std::cout << "unable to parse number with two points." << std::endl;
