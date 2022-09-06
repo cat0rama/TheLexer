@@ -1,5 +1,6 @@
 #include "lexer.hpp"
 #include "token.hpp"
+#include "error.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -8,29 +9,30 @@ using namespace stxa;
 
 int main(int argc, char *argv[], char *envp[])
 {
-    // Replace all with logging system
-    try {
-        Lexer& obj = Lexer::getInstance("file.txt");
-        Token t = Token::T_NULL;
+    Lexer lx;
 
-        while ((t = obj.getNextToken()) != Token::T_NULL) {
-            switch (t)
+    if (lx.openFile("file.txt") != Code::FILE_OPEN_ERROR) {
+        Token token;
+        while ((token = lx.getNextToken()) != Token::T_NULL) {
+            switch (token)
             {
             case Token::T_FUNC:
-                std::cout << "function detected!" << std::endl;
+                std::cout << "func detected: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
                 break;
             case Token::T_EXTERN:
-                std::cout << "extern detected!" << std::endl;
+                std::cout << "extern detected: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
                 break;
             case Token::T_RETURN:
-                std::cout << "return detected!" << std::endl;
+                std::cout << "return detected: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
                 break;
             case Token::T_NUMBER:
-                std::cout << "number found: " << std::setprecision(10) 
-                          << obj.m_num_value << std::endl;
+                std::cout << "number detected: " << std::get<double>(lx.getLastTokenData().data.value()) << std::endl;
+                std::cout << "number pos: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
                 break;
             case Token::T_ERROR:
                 std::cout << "unable to parse number with two and more points." << std::endl;
+                std::cout << lx.getLastTokenData().m_file_ptr_pos << std::endl;
+                std::cout << std::get<std::string>(lx.getLastTokenData().data.value_or("identifier doesnt exist")) << std::endl;
                 break;
             default:
                 std::cout << "operators not found." << std::endl;
@@ -38,7 +40,6 @@ int main(int argc, char *argv[], char *envp[])
             }
         }
     }
-    catch (const std::runtime_error &_err) {
-        std::cout << _err.what();
-    }
+
+    return 0;
 }

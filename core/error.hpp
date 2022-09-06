@@ -1,10 +1,16 @@
 #ifndef STXA_ERROR_HPP
 #define STXA_ERROR_HPP
 
-enum class ParseError : int
+namespace stxa 
 {
-    DOUBLE_POINT_ERROR = -2,
-    UNKNOWN_ERROR = -3
-};
+    enum class Code : int
+    {
+        // Error codes
+        FILE_OPEN_ERROR = -1,
+        UNKNOWN_ERROR = -2,
+
+        SUCCES = 1
+    };
+}
 
 #endif
