@@ -8,9 +8,23 @@ namespace stxa
     Lexer::Lexer(): m_token_data({Token::T_NULL, 0, {}})
     {   }
 
+    Lexer::Lexer(const std::string& t_file_name) noexcept : m_token_data({Token::T_NULL, 0, {}})
+    {
+        m_fstream.open(t_file_name);
+    }
+
+    Lexer::operator bool() const noexcept
+    {
+        return m_fstream.is_open();
+    }
+
     // Open file for parse
     auto Lexer::openFile(const std::string& t_file_name) noexcept -> Code
     {
+        if (m_fstream.is_open()) {
+            m_fstream.close();
+        }
+
         m_fstream.open(t_file_name, std::ios::in);
 
         if (!m_fstream.is_open()) {
@@ -23,7 +37,7 @@ namespace stxa
     // Get tokens from file
     auto Lexer::getNextToken() -> Token
     {
-        char last_char = 0;
+        static char last_char = 0;
 
         while (m_fstream.get(last_char)) {
             std::string identifier;
@@ -58,11 +72,11 @@ namespace stxa
                        [&number_str](char &c) { return c == '.'; } ) > 1) 
                     {
                         m_token_data.data = {};   // Nulling std::variant
-                        m_token_data.m_file_ptr_pos = m_fstream.tellg();     
-                        return Token::T_ERROR;   // If find number with two and more points, i return error
+                        m_token_data.m_file_ptr_pos = m_fstream.tellg();   // Get token position
+                        return Token::T_ERROR;   // If find number with two and more points, return error
                     }
                     m_token_data.m_file_ptr_pos = m_fstream.tellg();
-                    m_token_data.data = std::strtod(number_str.c_str(), nullptr);
+                    m_token_data.data = std::strtod(number_str.c_str(), nullptr);   // String to double
                     return Token::T_NUMBER;
             }
 

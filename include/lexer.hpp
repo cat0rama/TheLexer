@@ -18,11 +18,13 @@ namespace stxa
         {"return", Token::T_RETURN}
     };
 
-    // Lexer for parsing tokens from file. Singleton object
-    class Lexer final
+    // Lexer for parsing tokens from file.
+    class Lexer final 
     {
     public:
         Lexer();
+
+        Lexer(const std::string& t_file_name) noexcept;
 
         ~Lexer() noexcept = default;
         
@@ -31,6 +33,8 @@ namespace stxa
 
         Lexer& operator=(const Lexer&) = delete;
     public:
+        operator bool() const noexcept;
+
         auto openFile(const std::string& t_file_name) noexcept -> Code;
 
         auto getNextToken() -> Token;

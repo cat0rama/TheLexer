@@ -9,9 +9,9 @@ using namespace stxa;
 
 int main(int argc, char *argv[], char *envp[])
 {
-    Lexer lx;
-
-    if (lx.openFile("file.txt") != Code::FILE_OPEN_ERROR) {
+    Lexer lx("file.txt");
+    
+    if (lx) {
         Token token;
         while ((token = lx.getNextToken()) != Token::T_NULL) {
             switch (token)
