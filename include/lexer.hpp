@@ -10,7 +10,7 @@
 namespace stxa
 {
     // Lexer for parsing tokens from file.
-    class Lexer final 
+    class Lexer final
     {
     public:
         Lexer();
@@ -24,17 +24,22 @@ namespace stxa
 
         Lexer& operator=(const Lexer&) = delete;
     public:
+    // Encapsulation of some ifstream methods
         operator bool() const noexcept;
 
         auto openFile(const std::string& t_file_name) noexcept -> Code;
 
+    // Methods for work with tokens
         auto getNextToken() -> Token;
 
         auto getLastTokenData() const -> const TokenData&;
     private:
-    // Variables for storing values ​​from a file of different types
         std::ifstream m_fstream;
+    // Variable for store token metadata (token, value(C++ union), file ptr posiotion)
         TokenData m_token_data;
+    public:
+    // Variable that stores the last character
+        char m_last_char;
     };
 }
 

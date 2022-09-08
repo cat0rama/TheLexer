@@ -12,16 +12,17 @@ namespace stxa
         // End of file token
         T_EOF = -1,
         T_ERROR = -2,
+        T_NULL = 0,
 
         // Keywords
         T_FUNC = 1,
         T_EXTERN = 2,
         T_RETURN = 3,
-        T_NULL = 0,
+        T_COMMENT = 4,
 
         // Identifiers
-        T_IDENTIFIER = 4,
-        T_NUMBER = 5
+        T_IDENTIFIER = 5,
+        T_NUMBER = 6
     };
 
     struct TokenData

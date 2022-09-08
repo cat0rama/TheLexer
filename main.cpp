@@ -34,6 +34,10 @@ int main(int argc, char *argv[], char *envp[])
                 std::cout << lx.getLastTokenData().m_file_ptr_pos << std::endl;
                 std::cout << std::get<std::string>(lx.getLastTokenData().data.value_or("identifier doesnt exist")) << std::endl;
                 break;
+            case Token::T_COMMENT:
+                std::cout << "comment detected: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
+                std::cout << std::get<std::string>(lx.getLastTokenData().data.value_or("no such comment")) << std::endl;
+                break;
             default:
                 std::cout << "operators not found." << std::endl;
                 break;

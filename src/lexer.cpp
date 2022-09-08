@@ -37,20 +37,18 @@ namespace stxa
     // Get tokens from file
     auto Lexer::getNextToken() -> Token
     {
-        static char last_char = 0;
-
-        while (m_fstream.get(last_char)) {
+        while (m_fstream.get(m_last_char)) {
             std::string identifier;
 
-            if (std::isspace(last_char)) {
+            if (std::isspace(m_last_char)) {
                 continue;
             }
 
-            if (std::isalpha(last_char)) {
-                identifier = last_char;
+            if (std::isalpha(m_last_char)) {
+                identifier = m_last_char;
 
-                while (std::isalnum((last_char = m_fstream.get()))) {
-                    identifier.push_back(last_char);
+                while (std::isalnum((m_last_char = m_fstream.get()))) {
+                    identifier.push_back(m_last_char);
                 }
 
                 auto find_tok = identifiers_en.find(identifier);
@@ -61,12 +59,12 @@ namespace stxa
                 }
             }
 
-            if (std::isdigit(last_char) || last_char == '.') {
+            if (std::isdigit(m_last_char) || m_last_char == '.') {
                     std::string number_str;
                     do {
-                        number_str.push_back(last_char);
-                        last_char = m_fstream.get();
-                    } while (std::isdigit(last_char) || last_char == '.');
+                        number_str.push_back(m_last_char);
+                        m_last_char = m_fstream.get();
+                    } while (std::isdigit(m_last_char) || m_last_char == '.');
 
                     if (std::count_if(number_str.begin(), number_str.end(), 
                        [&number_str](char &c) { return c == '.'; } ) > 1) 
@@ -80,7 +78,18 @@ namespace stxa
                     return Token::T_NUMBER;
             }
 
-            if (last_char == EOF) {
+            if (m_last_char == '/') {
+                std::string comment;
+                m_token_data.m_file_ptr_pos = m_fstream.tellg();   // Get start comment position
+        
+                while ((m_last_char = m_fstream.get()) != '\n' && m_last_char != '\r') {
+                    comment.push_back(m_last_char);
+                }
+                m_token_data.data = std::move(comment);
+                return Token::T_COMMENT;
+            }
+
+            if (m_last_char == EOF) {
                 m_token_data.data = {};
                 return Token::T_EOF;
             }

@@ -1,7 +1,6 @@
 #ifndef STXA_LEXER_HPP
 #define STXA_LEXER_HPP
 
-
 // Abstract syntax tree
 
 namespace stxa
