@@ -6,18 +6,9 @@
 
 #include <string>
 #include <fstream>
-#include <unordered_map>
 
 namespace stxa
 {
-    // Map for tokens to quickly look up values
-    static const std::unordered_map<std::string, Token> identifiers = 
-    {
-        {"func", Token::T_FUNC},
-        {"extern", Token::T_EXTERN},
-        {"return", Token::T_RETURN}
-    };
-
     // Lexer for parsing tokens from file.
     class Lexer final 
     {

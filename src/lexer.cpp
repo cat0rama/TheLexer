@@ -1,3 +1,4 @@
+#include "identifier.hpp"
 #include "lexer.hpp"
 
 #include <iostream>
@@ -8,10 +9,9 @@ namespace stxa
     Lexer::Lexer(): m_token_data({Token::T_NULL, 0, {}})
     {   }
 
-    Lexer::Lexer(const std::string& t_file_name) noexcept : m_token_data({Token::T_NULL, 0, {}})
-    {
-        m_fstream.open(t_file_name);
-    }
+    Lexer::Lexer(const std::string& t_file_name) noexcept : m_token_data({Token::T_NULL, 0, {}}),
+                                                            m_fstream(t_file_name)
+    {   }
 
     Lexer::operator bool() const noexcept
     {
@@ -53,8 +53,8 @@ namespace stxa
                     identifier.push_back(last_char);
                 }
 
-                auto find_tok = identifiers.find(identifier);
-                if (find_tok != identifiers.end()) {
+                auto find_tok = identifiers_en.find(identifier);
+                if (find_tok != identifiers_en.end()) {
                     m_token_data.m_file_ptr_pos = m_fstream.tellg();
                     m_token_data.m_token = find_tok->second;
                     return  m_token_data.m_token;
