@@ -53,13 +53,17 @@ namespace stxa
 
                 auto find_tok = identifiers_en.find(identifier);
                 if (find_tok != identifiers_en.end()) {
-                    m_token_data.m_file_ptr_pos = m_fstream.tellg();
+                    /* Finding the position of the token by calculating the string of the identifier and the position 
+                    in the file, thereby finding the beginning of the position of the token in the file */
+                    m_token_data.m_file_ptr_pos = 
+                    m_fstream.tellg() - static_cast<std::streampos>(identifier.size());
                     m_token_data.m_token = find_tok->second;
                     return  m_token_data.m_token;
                 }
             }
 
-            if (std::isdigit(m_last_char) || m_last_char == '.') {
+            if (std::isdigit(m_last_char)) {
+                    m_token_data.m_file_ptr_pos = m_fstream.tellg();   // Get start number position
                     std::string number_str;
                     do {
                         number_str.push_back(m_last_char);
@@ -70,10 +74,8 @@ namespace stxa
                        [&number_str](char &c) { return c == '.'; } ) > 1) 
                     {
                         m_token_data.data = {};   // Nulling std::variant
-                        m_token_data.m_file_ptr_pos = m_fstream.tellg();   // Get token position
                         return Token::T_ERROR;   // If find number with two and more points, return error
                     }
-                    m_token_data.m_file_ptr_pos = m_fstream.tellg();
                     m_token_data.data = std::strtod(number_str.c_str(), nullptr);   // String to double
                     return Token::T_NUMBER;
             }
@@ -90,6 +92,7 @@ namespace stxa
             }
 
             if (m_last_char == EOF) {
+                m_token_data.m_file_ptr_pos = m_fstream.tellg();
                 m_token_data.data = {};
                 return Token::T_EOF;
             }
@@ -100,6 +103,6 @@ namespace stxa
 
     auto Lexer::getLastTokenData() const -> const TokenData&
     {
-       return m_token_data;
+       return m_token_data;   // Get token data(token, value(std::variant<double, string>), file ptr posiotion)
     }
 }

@@ -10,7 +10,7 @@ using namespace stxa;
 int main(int argc, char *argv[], char *envp[])
 {
     Lexer lx("file.txt");
-    
+
     if (lx) {
         Token token;
         while ((token = lx.getNextToken()) != Token::T_NULL) {
@@ -31,7 +31,7 @@ int main(int argc, char *argv[], char *envp[])
                 break;
             case Token::T_ERROR:
                 std::cout << "unable to parse number with two and more points." << std::endl;
-                std::cout << lx.getLastTokenData().m_file_ptr_pos << std::endl;
+                std::cout << "error pos: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
                 std::cout << std::get<std::string>(lx.getLastTokenData().data.value_or("identifier doesnt exist")) << std::endl;
                 break;
             case Token::T_COMMENT:
