@@ -18,7 +18,7 @@ namespace stxa
 
         virtual ~IExprAST() = default;
     };
-    
+
     // Expression class for number literals
     class NumberExpr: public IExprAST
     {
@@ -58,13 +58,16 @@ namespace stxa
     class CallExpr: public IExprAST
     {
     public:
-        CallExpr(const std::string& t_call_var)
+        CallExpr(const std::string& t_name, std::vector<std::string> t_args): 
+        m_name(t_name), m_args(std::move(t_args))
         {   }
 
         ~CallExpr() = default;
+    public:
+        const std::string& getName() const { return m_name; }
     private:
-        std::vector<expr_ptr> m_args;
-        std::string m_call_var; 
+        std::vector<std::string> m_args;
+        std::string m_name; 
     };
 }
 
