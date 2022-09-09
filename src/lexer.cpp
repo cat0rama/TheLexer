@@ -1,7 +1,6 @@
 #include "identifier.hpp"
 #include "lexer.hpp"
 
-#include <iostream>
 #include <algorithm>
 
 namespace stxa
@@ -58,13 +57,14 @@ namespace stxa
                     m_token_data.m_file_ptr_pos = 
                     m_fstream.tellg() - static_cast<std::streampos>(identifier.size());
                     m_token_data.m_token = find_tok->second;
-                    return  m_token_data.m_token;
+                    return m_token_data.m_token;
                 }
             }
 
             if (std::isdigit(m_last_char)) {
                     m_token_data.m_file_ptr_pos = m_fstream.tellg();   // Get start number position
                     std::string number_str;
+
                     do {
                         number_str.push_back(m_last_char);
                         m_last_char = m_fstream.get();
@@ -83,7 +83,7 @@ namespace stxa
             if (m_last_char == '/') {
                 std::string comment;
                 m_token_data.m_file_ptr_pos = m_fstream.tellg();   // Get start comment position
-        
+
                 while ((m_last_char = m_fstream.get()) != '\n' && m_last_char != '\r') {
                     comment.push_back(m_last_char);
                 }

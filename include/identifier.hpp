@@ -14,6 +14,11 @@ namespace stxa
         {"extern", Token::T_EXTERN},
         {"return", Token::T_RETURN}
     };
+
+    inline const std::unordered_map<std::string, Token> identifiers_lez = 
+    {
+        
+    };
 }
 
 #endif
