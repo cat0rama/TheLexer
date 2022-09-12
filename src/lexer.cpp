@@ -8,8 +8,8 @@ namespace stxa
     Lexer::Lexer(): m_token_data({Token::T_NULL, 0, {}})
     {   }
 
-    Lexer::Lexer(const std::string& t_file_name) noexcept : m_token_data({Token::T_NULL, 0, {}}),
-                                                            m_fstream(t_file_name)
+    Lexer::Lexer(const std::string& t_file_name) noexcept : 
+    m_fstream(t_file_name), m_token_data({Token::T_NULL, 0, {}})
     {   }
 
     Lexer::operator bool() const noexcept
@@ -73,10 +73,10 @@ namespace stxa
                     if (std::count_if(number_str.begin(), number_str.end(), 
                        [&number_str](char &c) { return c == '.'; } ) > 1) 
                     {
-                        m_token_data.data = {};   // Nulling std::variant
+                        m_token_data.m_data = {};   // Nulling std::variant
                         return Token::T_ERROR;   // If find number with two and more points, return error
                     }
-                    m_token_data.data = std::strtod(number_str.c_str(), nullptr);   // String to double
+                    m_token_data.m_data = std::strtod(number_str.c_str(), nullptr);   // String to double
                     return Token::T_NUMBER;
             }
 
@@ -87,13 +87,13 @@ namespace stxa
                 while ((m_last_char = m_fstream.get()) != '\n' && m_last_char != '\r') {
                     comment.push_back(m_last_char);
                 }
-                m_token_data.data = std::move(comment);
+                m_token_data.m_data = std::move(comment);
                 return Token::T_COMMENT;
             }
 
             if (m_last_char == EOF) {
-                m_token_data.m_file_ptr_pos = m_fstream.tellg();
-                m_token_data.data = {};
+                m_token_data.m_file_ptr_pos = m_fstream.tellg();   // Get last position of file
+                m_token_data.m_data = {};
                 return Token::T_EOF;
             }
         }
@@ -103,6 +103,6 @@ namespace stxa
 
     auto Lexer::getLastTokenData() const -> const TokenData&
     {
-       return m_token_data;   // Get token data(token, value(std::variant<double, string>), file ptr posiotion)
+       return m_token_data;   // Get token data(token, value(std::variant<double, string>), file ptr position)
     }
 }

@@ -1,6 +1,6 @@
-#include "lexer.hpp"
 #include "token.hpp"
 #include "error.hpp"
+#include "parse.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -26,23 +26,22 @@ int main(int argc, char *argv[], char *envp[])
                 std::cout << "return detected: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
                 break;
             case Token::T_NUMBER:
-                std::cout << "number detected: " << std::get<double>(lx.getLastTokenData().data.value()) << std::endl;
+                std::cout << "number detected: " << std::get<double>(lx.getLastTokenData().m_data.value()) << std::endl;
                 std::cout << "number pos: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
                 break;
             case Token::T_ERROR:
                 std::cout << "unable to parse number with two and more points." << std::endl;
                 std::cout << "error pos: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
-                std::cout << std::get<std::string>(lx.getLastTokenData().data.value_or("identifier doesnt exist")) << std::endl;
+                std::cout << std::get<std::string>(lx.getLastTokenData().m_data.value_or("identifier doesnt exist")) << std::endl;
                 break;
             case Token::T_COMMENT:
                 std::cout << "comment detected: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
-                std::cout << std::get<std::string>(lx.getLastTokenData().data.value_or("no such comment")) << std::endl;
-                break;
-            default:
-                std::cout << "operators not found." << std::endl;
+                std::cout << std::get<std::string>(lx.getLastTokenData().m_data.value_or("no such comment")) << std::endl;
                 break;
             }
         }
+    } else {
+        std::cout << "unable to open file" << std::endl;
     }
 
     return 0;
