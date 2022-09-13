@@ -5,6 +5,7 @@
 # Directories
 build/
 .vscode/
+.vs/
 
 # Compiled Object files
 *.slo

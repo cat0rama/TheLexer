@@ -5,11 +5,11 @@
 
 namespace stxa
 {
-    Lexer::Lexer(): m_token_data({Token::T_NULL, 0, {}})
+    Lexer::Lexer(): m_token_data({Token::T_NULL, 0, {}}), m_last_char(0)
     {   }
 
     Lexer::Lexer(const std::string& t_file_name) noexcept : 
-    m_fstream(t_file_name), m_token_data({Token::T_NULL, 0, {}})
+    m_fstream(t_file_name), m_token_data({Token::T_NULL, 0, {}}), m_last_char(0)
     {   }
 
     Lexer::operator bool() const noexcept
@@ -81,13 +81,13 @@ namespace stxa
             }
 
             if (m_last_char == '/') {
-                std::string comment;
                 m_token_data.m_file_ptr_pos = m_fstream.tellg();   // Get start comment position
-
-                while ((m_last_char = m_fstream.get()) != '\n' && m_last_char != '\r') {
-                    comment.push_back(m_last_char);
+                
+                while ((m_last_char = m_fstream.get()) != EOF &&
+                        m_last_char != '\n' && m_last_char != '\r') {
+                    continue;   // Pass comment message
                 }
-                m_token_data.m_data = std::move(comment);
+
                 return Token::T_COMMENT;
             }
 
