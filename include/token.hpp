@@ -31,7 +31,7 @@ namespace stxa
         // Token
         Token m_token;
         // File pointer position after identifier
-        std::streamsize m_file_ptr_pos;
+        std::streampos m_file_ptr_pos;
         // Identifier data, number or string
         std::optional<std::variant<double, std::string>> m_data;
     };

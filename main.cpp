@@ -13,7 +13,7 @@ int main(int argc, char *argv[], char *envp[])
 
     if (lx) {
         Token token;
-        while ((token = lx.getNextToken()) != Token::T_NULL) {
+        while ((token = lx.getNextToken()) != Token::T_EOF) {
             switch (token)
             {
             case Token::T_FUNC:
@@ -33,6 +33,9 @@ int main(int argc, char *argv[], char *envp[])
                 std::cout << "unable to parse number with two and more points." << std::endl;
                 std::cout << "error pos: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
                 std::cout << std::get<std::string>(lx.getLastTokenData().m_data.value_or("identifier doesnt exist")) << std::endl;
+                break;
+            case Token::T_EOF:
+                std::cout << "END OF FILE!" << std::endl;
                 break;
             case Token::T_COMMENT:
                 std::cout << "comment detected: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;

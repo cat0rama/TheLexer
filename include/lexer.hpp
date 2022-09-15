@@ -23,6 +23,13 @@ namespace stxa
         Lexer(const Lexer&) = delete;
 
         Lexer& operator=(const Lexer&) = delete;
+    private:
+    // Methods for parse tokens
+        auto parseKeyword(std::string &t_identifier) -> bool;
+
+        auto parseNumber(std::string &t_identifier) -> bool;
+
+        auto parseComment() -> bool;
     public:
     // Encapsulation of some ifstream methods
         operator bool() const noexcept;
@@ -37,6 +44,7 @@ namespace stxa
         std::ifstream m_fstream;
     // Variable for store token metadata (token, value(C++ union), file ptr posiotion)
         TokenData m_token_data;
+        char m_next_char;
     public:
     // Variable that stores the last character
         char m_last_char;
