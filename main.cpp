@@ -26,6 +26,7 @@ int main(int argc, char *argv[], char *envp[])
                 std::cout << "return detected: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
                 break;
             case Token::T_NUMBER:
+                std::cout << std::setprecision(10);
                 std::cout << "number detected: " << std::get<double>(lx.getLastTokenData().m_data.value()) << std::endl;
                 std::cout << "number pos: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
                 break;
