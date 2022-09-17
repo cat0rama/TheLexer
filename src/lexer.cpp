@@ -6,10 +6,10 @@
 
 namespace stxa
 {
-    Lexer::Lexer() : m_token_data({Token::T_NULL, 0, {}}), m_last_char(0)
+    Lexer::Lexer(): m_token_data({Token::T_NULL, 0, {}}), m_last_char(0)
     {   }
 
-    Lexer::Lexer(const std::string &t_file_name) noexcept : 
+    Lexer::Lexer(const std::string &t_file_name): 
     m_fstream(t_file_name), m_token_data({Token::T_NULL, 0, {}}), m_last_char(0)
     {   }
 
@@ -20,7 +20,7 @@ namespace stxa
             t_identifier = m_last_char;
             while ((m_next_char = m_fstream.peek()) != EOF && m_next_char != '\n' && m_next_char != ' ') {
                 if (std::isalnum((m_last_char = m_fstream.get()))) {
-                    t_identifier.push_back(m_last_char);
+                    t_identifier.push_back(m_last_char);    // Push identifier character
                 }
             }
             return true;
@@ -52,7 +52,7 @@ namespace stxa
             while ((m_next_char = m_fstream.peek()) != EOF && 
                     m_next_char != '\n' && m_next_char != '\r') 
             {
-                m_last_char = m_fstream.get();
+                m_last_char = m_fstream.get();   // Get symbol from file for skip it, but save file ptr position
                 continue;
             }
             return true;

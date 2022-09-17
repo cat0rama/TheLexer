@@ -15,9 +15,9 @@ namespace stxa
     public:
         Lexer();
 
-        Lexer(const std::string& t_file_name) noexcept;
+        Lexer(const std::string& t_file_name);
 
-        ~Lexer() noexcept = default;
+        virtual ~Lexer() noexcept = default;
         
     // Delete copy constructor and operator assigment
         Lexer(const Lexer&) = delete;

@@ -1,27 +1,27 @@
 #ifndef STXA_PARSE_HPP
 #define STXA_PARSE_HPP
 
-#include "AST/exprAST.hpp"
+#include "exprAST.hpp"
 #include "lexer.hpp"
-
-#include <variant>
 
 namespace stxa
 {
-    std::unique_ptr<IExprAST> parseExpression(Lexer& _lexer);
-
-    std::unique_ptr<IExprAST> parseNumber(Lexer& _lexer);
-
-    std::unique_ptr<IExprAST> parseBracket(Lexer& _lexer);
-
+    // Parser for parse difference values
     class Parser : public Lexer
     {
+        using expr_ptr = IExprAST::expr_ptr;
     public:
         Parser() = default;
 
-        ~Parser() = default;
+        Parser(const std::string& t_file_name);
+
+        ~Parser() noexcept = default;
     public:
-        
+        auto parseExpression() -> expr_ptr;
+
+        auto parseNumber() -> expr_ptr;
+
+        auto parseBracket() -> expr_ptr;
     };
 }
 

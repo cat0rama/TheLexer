@@ -4,6 +4,9 @@
 
 namespace stxa
 {
+    Parser::Parser(const std::string& t_file_name): Lexer(t_file_name)
+    {   }
+
     std::unique_ptr<IExprAST> parseNumber(Lexer& _lexer)
     {
         _lexer.getNextToken();

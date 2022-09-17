@@ -1,6 +1,7 @@
 #include "error.hpp"
 #include "token.hpp"
 #include "lexer.hpp"
+#include "parser.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -10,7 +11,7 @@ using namespace stxa;
 int main(int argc, char *argv[], char *envp[])
 {
     Lexer lx("file.txt");
-
+    
     if (lx) {
         Token token;
         while ((token = lx.getNextToken()) != Token::T_EOF) {
