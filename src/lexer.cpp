@@ -116,7 +116,7 @@ namespace stxa
 
             if (findNumber(m_identifier)) {   // Parse number
                 if (std::count_if(m_identifier.begin(), m_identifier.end(),
-                    [&](char &c) { return c == '.'; }) > 1)
+                    [&](char &c) { return c == '.'; }) > 1)   // Count dots in string
                 {
                     m_token_data.m_data = {};   // Nulling std::variant
                     return Token::T_ERROR;      // If find number with two and more points, return error
