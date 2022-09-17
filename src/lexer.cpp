@@ -13,7 +13,8 @@ namespace stxa
     m_fstream(t_file_name), m_token_data({Token::T_NULL, 0, {}}), m_last_char(0)
     {   }
 
-    auto Lexer::parseKeyword(std::string &t_identifier) -> bool
+    // Parse keywords
+    auto Lexer::findKeyword(std::string &t_identifier) -> bool
     {
         if (std::isalpha(m_last_char)) {
             t_identifier = m_last_char;
@@ -27,7 +28,8 @@ namespace stxa
         return false;
     }
 
-    auto Lexer::parseNumber(std::string& t_identifier) -> bool
+    // Parse number
+    auto Lexer::findNumber(std::string& t_identifier) -> bool
     {
         if (std::isdigit(m_last_char)) {
             m_token_data.m_file_ptr_pos = m_fstream.tellg() - std::streampos(1);   // Get start number position
@@ -43,7 +45,8 @@ namespace stxa
         return false;
     }
 
-    auto Lexer::parseComment() -> bool
+    // Parse comment
+    auto Lexer::findComment() -> bool
     {
         if (m_last_char == '/') {    // Parse comment for skip it, but save read ptr position
             while ((m_next_char = m_fstream.peek()) != EOF && 
@@ -56,7 +59,8 @@ namespace stxa
         }
         return false;
     }
-
+    
+    // Overload operator() for checking istream object
     Lexer::operator bool() const noexcept
     {
         return m_fstream.is_open();
@@ -82,8 +86,6 @@ namespace stxa
     auto Lexer::getNextToken() -> Token
     {
         while (m_fstream) {
-            std::string identifier;
-            
             if (m_next_char == EOF || m_fstream.peek() == EOF) {    // Parse end of file
                 m_token_data.m_file_ptr_pos = 0;
                 m_token_data.m_data = {};
@@ -95,26 +97,26 @@ namespace stxa
                 continue; 
             }
 
-            if (parseKeyword(identifier)) {
-                auto find_tok = identifiers_en.find(identifier);
+            if (findKeyword(m_identifier)) {    // Parse keyword
+                auto find_tok = identifiers_en.find(m_identifier);
                 if (find_tok != identifiers_en.end()) {
-                    /* Finding the position of the token by calculating the string of the identifier and the position
+                    /* Finding the position of the token by calculating the string of the m_identifier and the position
                     in the file, thereby finding the beginning of the position of the token in the file */
                     if (m_next_char == EOF) {
                         m_fstream.seekg(0, std::ios::end);   // Go to end file
-                        m_token_data.m_file_ptr_pos =   // Calculate position of identifier
-                            m_fstream.tellg() - static_cast<std::streampos>(identifier.length());
+                        m_token_data.m_file_ptr_pos =   // Calculate position of m_identifier
+                            m_fstream.tellg() - static_cast<std::streampos>(m_identifier.length());
                     } else {
                         m_token_data.m_file_ptr_pos =
-                            m_fstream.tellg() - static_cast<std::streampos>(identifier.length());
+                            m_fstream.tellg() - static_cast<std::streampos>(m_identifier.length());
                     }
                     return (m_token_data.m_token = find_tok->second);   // Return token
                 }
             }
 
-            if (parseNumber(identifier)) {   // Parse number
-                if (std::count_if(identifier.begin(), identifier.end(),
-                    [&identifier](char &c) { return c == '.'; }) > 1)
+            if (findNumber(m_identifier)) {   // Parse number
+                if (std::count_if(m_identifier.begin(), m_identifier.end(),
+                    [&](char &c) { return c == '.'; }) > 1)
                 {
                     m_token_data.m_data = {};   // Nulling std::variant
                     return Token::T_ERROR;      // If find number with two and more points, return error
@@ -122,7 +124,7 @@ namespace stxa
                 return Token::T_NUMBER;
             }
 
-            if (parseComment()) {    // Parse comment for skip it, but save read ptr position
+            if (findComment()) {    // Parse comment for skip it, but save read ptr position
                 m_token_data.m_file_ptr_pos = 0;
                 return Token::T_COMMENT;
             }

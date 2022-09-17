@@ -10,7 +10,7 @@
 namespace stxa
 {
     // Lexer for parsing tokens from file.
-    class Lexer final
+    class Lexer
     {
     public:
         Lexer();
@@ -25,11 +25,11 @@ namespace stxa
         Lexer& operator=(const Lexer&) = delete;
     private:
     // Methods for parse tokens
-        auto parseKeyword(std::string &t_identifier) -> bool;
+        auto findKeyword(std::string &t_identifier) -> bool;
 
-        auto parseNumber(std::string &t_identifier) -> bool;
+        auto findNumber(std::string &t_identifier) -> bool;
 
-        auto parseComment() -> bool;
+        auto findComment() -> bool;
     public:
     // Encapsulation of some ifstream methods
         operator bool() const noexcept;
@@ -48,6 +48,8 @@ namespace stxa
     public:
     // Variable that stores the last character
         char m_last_char;
+    protected:
+        std::string m_identifier;
     };
 }
 

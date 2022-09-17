@@ -1,6 +1,6 @@
-#include "token.hpp"
 #include "error.hpp"
-#include "parse.hpp"
+#include "token.hpp"
+#include "lexer.hpp"
 
 #include <iostream>
 #include <iomanip>

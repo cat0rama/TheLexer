@@ -16,3 +16,4 @@ add_executable(STXA
 # disable RTTI and exceptions
 
 target_include_directories(STXA PRIVATE include/)
+target_include_directories(STXA PRIVATE include/AST)

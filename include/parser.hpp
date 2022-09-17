@@ -13,6 +13,16 @@ namespace stxa
     std::unique_ptr<IExprAST> parseNumber(Lexer& _lexer);
 
     std::unique_ptr<IExprAST> parseBracket(Lexer& _lexer);
+
+    class Parser : public Lexer
+    {
+    public:
+        Parser() = default;
+
+        ~Parser() = default;
+    public:
+        
+    };
 }
 
 #endif
