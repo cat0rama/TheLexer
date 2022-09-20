@@ -5,8 +5,6 @@
 #include "funcAST.hpp"
 #include "lexer.hpp"
 
-#include <type_traits>
-
 namespace stxa
 {
     // Parser for parse difference values
@@ -21,9 +19,13 @@ namespace stxa
 
         ~Parser() noexcept = default;
     public:
+        auto getTokPrecedence() -> int;
+
         auto parseExpression() -> expr_ptr<IExprAST>;
 
         auto parseNumber() -> expr_ptr<IExprAST>;
+
+        auto parseParenExpr() -> expr_ptr<IExprAST>;
 
         auto parseIdentifier() -> expr_ptr<IExprAST>;
 
@@ -32,6 +34,8 @@ namespace stxa
         auto parseDefinition() -> expr_ptr<IExprAST>;
 
         auto parsePrimary() -> expr_ptr<IExprAST>;
+
+        auto parseBinaryOpRHS(int expr_prec, expr_ptr<IExprAST> lhs);
     };
 }
 

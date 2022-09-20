@@ -9,7 +9,7 @@
 namespace stxa
 {
     // Map for binary operation precedence
-    inline const std::map<char, int> binary_precedence = 
+    inline const std::map<char, int> g_binary_precedence = 
     {
         {'+', 20},
         {'-', 20},
@@ -18,7 +18,7 @@ namespace stxa
     };
 
     // Map for tokens to quickly look up values (English)
-    inline const std::unordered_map<std::string, Token> identifiers_en = 
+    inline const std::unordered_map<std::string, Token> g_identifiers_en = 
     {
         {"func", Token::T_FUNC},
         {"extern", Token::T_EXTERN},
@@ -26,7 +26,7 @@ namespace stxa
     };
 
     // Map for tokens to quickly look up values (Lezgi)
-    inline const std::unordered_map<std::string, Token> identifiers_lez = 
+    inline const std::unordered_map<std::string, Token> g_identifiers_lez = 
     {
         
     };

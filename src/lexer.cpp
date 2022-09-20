@@ -78,7 +78,6 @@ namespace stxa
         if (!m_fstream.is_open()) {
             return Code::FILE_OPEN_ERROR;
         }
-
         return Code::SUCCES;
     }
 
@@ -98,8 +97,8 @@ namespace stxa
             }
 
             if (findKeyword(m_identifier)) {    // Parse keyword
-                auto find_tok = identifiers_en.find(m_identifier);
-                if (find_tok != identifiers_en.end()) {
+                auto find_tok = g_identifiers_en.find(m_identifier);
+                if (find_tok != g_identifiers_en.end()) {
                     /* Finding the position of the token by calculating the string of the m_identifier and the position
                     in the file, thereby finding the beginning of the position of the token in the file */
                     if (m_next_char == EOF) {
@@ -112,6 +111,7 @@ namespace stxa
                     }
                     return (m_token_data.m_token = find_tok->second);   // Return token
                 }
+                return Token::T_IDENTIFIER;
             }
 
             if (findNumber(m_identifier)) {   // Parse number

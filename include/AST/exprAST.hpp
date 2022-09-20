@@ -58,7 +58,7 @@ namespace stxa
     class CallExpr: public IExprAST
     {
     public:
-        CallExpr(const std::string& t_name, std::vector<std::string> t_args): 
+        CallExpr(const std::string& t_name, std::vector<expr_ptr> t_args): 
         m_name(t_name), m_args(std::move(t_args))
         {   }
 
@@ -66,7 +66,7 @@ namespace stxa
     public:
         const std::string& getName() const { return m_name; }
     private:
-        std::vector<std::string> m_args;
+        std::vector<expr_ptr> m_args;
         std::string m_name; 
     };
 }
