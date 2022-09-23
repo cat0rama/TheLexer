@@ -10,7 +10,7 @@ namespace stxa
     // Parser for parse difference values
     class Parser : public Lexer
     {
-        template<typename T>
+        template<typename T = IExprAST>
         using expr_ptr = std::unique_ptr<T>;
     public:
         Parser() = default;
@@ -21,21 +21,21 @@ namespace stxa
     public:
         auto getTokPrecedence() -> int;
 
-        auto parseExpression() -> expr_ptr<IExprAST>;
+        auto parseExpression() -> expr_ptr<>;
 
-        auto parseNumber() -> expr_ptr<IExprAST>;
+        auto parseNumber() -> expr_ptr<>;
 
-        auto parseParenExpr() -> expr_ptr<IExprAST>;
+        auto parseParenExpr() -> expr_ptr<>;
 
-        auto parseIdentifier() -> expr_ptr<IExprAST>;
+        auto parseIdentifier() -> expr_ptr<>;
 
-        auto parsePrototype() -> expr_ptr<IExprAST>;
+        auto parsePrototype() -> expr_ptr<FuncPrototype>;
 
-        auto parseDefinition() -> expr_ptr<IExprAST>;
+        auto parseDefinition() -> expr_ptr<FuncDefinition>;
 
-        auto parsePrimary() -> expr_ptr<IExprAST>;
+        auto parsePrimary() -> expr_ptr<>;
 
-        auto parseBinaryOpRHS(int expr_prec, expr_ptr<IExprAST> lhs);
+        auto parseBinaryOpRHS(int expr_prec, expr_ptr<> lhs) -> expr_ptr<>;
     };
 }
 

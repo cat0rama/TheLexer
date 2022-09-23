@@ -8,7 +8,7 @@ namespace stxa
 {
     Parser::Parser(const std::string& t_file_name): Lexer(t_file_name)
     {   }
-    // prototype shit code
+    // Prototype shit code
     auto Parser::getTokPrecedence() -> int
     {
         if (!isascii(m_last_char)) {
@@ -24,7 +24,7 @@ namespace stxa
         return tok_prec->second;
     }
 
-    auto Parser::parseNumber() -> expr_ptr<IExprAST>
+    auto Parser::parseNumber() -> expr_ptr<>
     {
         auto result = std::make_unique<NumberExpr>
                      (std::get<double>(getLastTokenData().m_data.value()));
@@ -34,7 +34,7 @@ namespace stxa
         return std::move(result);
     }
 
-    auto Parser::parseParenExpr() -> expr_ptr<IExprAST>
+    auto Parser::parseParenExpr() -> expr_ptr<>
     {
         getNextToken();
 
@@ -53,7 +53,7 @@ namespace stxa
         return v;
     }
 
-    auto Parser::parseIdentifier() -> expr_ptr<IExprAST>
+    auto Parser::parseIdentifier() -> expr_ptr<>
     {
         std::string id_name = m_identifier;
         
@@ -91,7 +91,7 @@ namespace stxa
         return std::make_unique<CallExpr>(id_name, std::move(args));
     }
 
-    auto Parser::parsePrimary() -> expr_ptr<IExprAST>
+    auto Parser::parsePrimary() -> expr_ptr<>
     {
         auto tok = getLastTokenData().m_token;
 
@@ -102,7 +102,93 @@ namespace stxa
         } else if (m_last_char == '(') {
             return parseParenExpr();
         }
+
+        return nullptr;
     }
 
-    
+    auto Parser::parseBinaryOpRHS(int expr_prec, expr_ptr<> lhs) -> expr_ptr<>
+    {
+        while (true) {
+            int tok_prec = getTokPrecedence();
+
+            if (tok_prec < expr_prec) {
+                return lhs;
+            }
+
+            int bin_op = m_last_char;
+
+            getNextToken();
+
+            auto rhs = parsePrimary();
+
+            if (!rhs) {
+                return nullptr;
+            }
+
+            int next_prec = getTokPrecedence();
+
+            if (tok_prec < next_prec) {
+                rhs = parseBinaryOpRHS(tok_prec + 1, std::move(rhs));
+                if (!rhs) {
+                    return nullptr;
+                }
+            }
+
+            lhs = std::make_unique<BinaryExpr>(bin_op, std::move(lhs), std::move(rhs));
+        }
+    }
+
+    auto Parser::parseExpression() -> expr_ptr<> 
+    {
+        auto lhs = parsePrimary();
+
+        if (!lhs) {
+            return nullptr;
+        }
+
+        return parseBinaryOpRHS(0, std::move(lhs));
+    }
+
+    auto Parser::parsePrototype() -> expr_ptr<FuncPrototype>
+    {
+        if (getLastTokenData().m_token != Token::T_IDENTIFIER) {
+            std::cout << "Expected function name in prototype" << std::endl;
+            return nullptr;
+        }
+
+        std::string fn_name = m_identifier;
+        getNextToken();
+
+        if (m_last_char != '(') {
+            std::cout << "expected '(' in prototype" << std::endl;
+            return nullptr;
+        }
+
+        std::vector<std::string> arg_names;
+
+        while (getNextToken() == Token::T_IDENTIFIER) {
+            arg_names.push_back(m_identifier);
+        }
+
+        if (m_last_char != ')') {
+            std::cout << "Expceted ')' in prototype" << std::endl;
+            return nullptr;
+        }
+
+        getNextToken();
+
+        return std::make_unique<FuncPrototype>(fn_name, std::move(arg_names));
+    }
+
+    auto Parser::parseDefinition() -> expr_ptr<FuncDefinition>
+    {
+        getNextToken();
+
+        auto proto = parsePrototype();
+
+        if (!proto) {
+            return nullptr;
+        }
+        
+    }
 }
