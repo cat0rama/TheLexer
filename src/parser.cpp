@@ -180,6 +180,20 @@ namespace stxa
         return std::make_unique<FuncPrototype>(fn_name, std::move(arg_names));
     }
 
+    auto Parser::parseExtern() -> expr_ptr<FuncPrototype>
+    {
+        getNextToken();
+        return parsePrototype();   
+    }
+
+    auto Parser::parseTopLevelExpr() -> expr_ptr<FuncDefinition>
+    {
+        if (auto E = parseExpression()) {
+            auto proto = std::make_unique<FuncPrototype>("", std::vector<std::string>());
+            return std::make_unique<FuncDefinition>(std::move(proto), std::move(E)); 
+        }
+    }
+
     auto Parser::parseDefinition() -> expr_ptr<FuncDefinition>
     {
         getNextToken();
@@ -190,5 +204,9 @@ namespace stxa
             return nullptr;
         }
         
+        if (auto E = parseExpression()) {
+            return std::make_unique<FuncDefinition>(std::move(proto), std::move(E));
+        }
+        return nullptr;
     }
 }

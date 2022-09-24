@@ -35,6 +35,10 @@ namespace stxa
 
         auto parsePrimary() -> expr_ptr<>;
 
+        auto parseExtern() -> expr_ptr<FuncPrototype>;
+
+        auto parseTopLevelExpr() -> expr_ptr<FuncDefinition>;
+
         auto parseBinaryOpRHS(int expr_prec, expr_ptr<> lhs) -> expr_ptr<>;
     };
 }
