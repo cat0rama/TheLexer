@@ -29,6 +29,12 @@ namespace stxa
         FuncDefinition(std::unique_ptr<FuncPrototype> t_proto, std::unique_ptr<IExprAST> t_body):
         m_proto(std::move(t_proto)), m_body(std::move(t_body))
         {   }
+
+        std::string getName() const
+        {
+            return m_proto->getName();
+        }
+
     private:
         std::unique_ptr<FuncPrototype> m_proto;
         std::unique_ptr<IExprAST> m_body;

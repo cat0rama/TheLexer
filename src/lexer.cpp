@@ -23,7 +23,8 @@ namespace stxa
     {
         if (std::isalpha(m_last_char)) {
             t_identifier = m_last_char;
-            while ((m_next_char = m_fstream.peek()) != EOF && m_next_char != '\n' && m_next_char != ' ' && !isBracket(m_next_char)) {
+            while ((m_next_char = m_fstream.peek()) != EOF && m_next_char != '\n' && m_next_char != ' ' 
+                    && !isBracket(m_next_char)) {
                 if (std::isalnum((m_last_char = m_fstream.get()))) {
                     t_identifier.push_back(m_last_char);    // Push identifier character
                 }
@@ -93,7 +94,7 @@ namespace stxa
             if (m_next_char == EOF || m_fstream.peek() == EOF) {    // Parse end of file
                 m_token_data.m_file_ptr_pos = 0;
                 m_token_data.m_data = {};
-                return Token::T_EOF;
+                return (m_token_data.m_token = Token::T_EOF);
             }
 
             m_last_char = m_fstream.get();
@@ -116,11 +117,12 @@ namespace stxa
                     }
                     return (m_token_data.m_token = find_tok->second);   // Return token
                 }
-                return (m_token_data.m_token = Token::T_IDENTIFIER);
+                return (m_token_data.m_token = Token::T_IDENTIFIER);    // Return some word if token doesnt find
             }
 
             if (isBracket(m_last_char)) {
-                return Token::T_BRACKET;
+                m_token_data.m_data = {};
+                return (m_token_data.m_token = Token::T_BRACKET);
             }
 
             if (findNumber(m_identifier)) {   // Parse number
@@ -128,14 +130,15 @@ namespace stxa
                     [&](char &c) { return c == '.'; }) > 1)   // Count dots in string
                 {
                     m_token_data.m_data = {};   // Nulling std::variant
-                    return Token::T_ERROR;      // If find number with two and more points, return error
+                    return (m_token_data.m_token = Token::T_ERROR);      // If find number with two and more points, return error
                 }
-                return Token::T_NUMBER;
+                return (m_token_data.m_token = Token::T_NUMBER);
             }
 
             if (findComment()) {    // Parse comment for skip it, but save read ptr position
                 m_token_data.m_file_ptr_pos = 0;
-                return Token::T_COMMENT;
+                m_token_data.m_data = {};
+                return (m_token_data.m_token = Token::T_COMMENT);
             }
         }
 

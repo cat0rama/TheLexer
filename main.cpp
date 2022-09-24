@@ -6,6 +6,8 @@
 #include <iomanip>
 #include <iostream>
 #include <type_traits>
+#include <iterator>
+#include <string>
 
 using namespace stxa;
 
@@ -13,22 +15,31 @@ int main(int argc, char *argv[], char *envp[])
 {
     Parser lx("file.txt");
 
-    while (true)
+    while (lx.getLastTokenData().m_token != Token::T_EOF)
     {
         auto it = lx.getLastTokenData();
-        if (it.m_token == Token::T_EOF) {
-            break;
+        
+        if (it.m_token == Token::T_EXTERN) {
+            if (auto ex = lx.parseExtern()){
+                std::cout << "parsed extern ";
+                auto args = ex->getArgs();
+                std::cout << ex->getName();
+                std::copy(args.begin(), args.end(), std::ostream_iterator<std::string>(std::cout, ""));
+            } else {
+                std::cout << "signature is not defined" << std::endl;
+            }
         }
 
-        if (it.m_token == Token::T_EXTERN) {
-            auto ex = lx.parseExtern();
-            std::cout << "parsed extern" << std::endl;
-            std::cout << ex->getName() << std::endl;
-            for (const auto &a : ex->getArgs()) {
-                std::cout << a << std::endl;
+        if (it.m_token == Token::T_FUNC) {
+            if (auto func = lx.parseDefinition()) {
+                std::cout << "parsed func";
+                std::cout << func->getName() << std::endl;
+            } else {
+                std::cout << "signature is not defined" << std::endl;
             }
-            break;
         }
+
+        lx.getNextToken();
     }
 
     return 0;

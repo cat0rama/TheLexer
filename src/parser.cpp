@@ -157,7 +157,8 @@ namespace stxa
         }
 
         std::string fn_name = m_identifier;
-
+        getNextToken();
+        
         if (m_last_char != '(') {
             std::cout << "expected '(' in prototype" << std::endl;
             return nullptr;
