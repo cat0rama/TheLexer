@@ -23,7 +23,9 @@ namespace stxa
 
         // Identifiers
         T_IDENTIFIER = 6,
-        T_NUMBER = 7
+        T_NUMBER = 7,
+
+        T_BRACKET = 8
     };
 
     struct TokenData

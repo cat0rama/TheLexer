@@ -13,12 +13,17 @@ namespace stxa
     m_fstream(t_file_name), m_token_data({Token::T_NULL, 0, {}}), m_last_char(0)
     {   }
 
+    auto Lexer::isBracket(const char t_sym) const noexcept -> bool
+    {
+        return t_sym == ')' || t_sym == '(';
+    }
+
     // Parse keywords
     auto Lexer::findKeyword(std::string &t_identifier) -> bool
     {
         if (std::isalpha(m_last_char)) {
             t_identifier = m_last_char;
-            while ((m_next_char = m_fstream.peek()) != EOF && m_next_char != '\n' && m_next_char != ' ') {
+            while ((m_next_char = m_fstream.peek()) != EOF && m_next_char != '\n' && m_next_char != ' ' && !isBracket(m_next_char)) {
                 if (std::isalnum((m_last_char = m_fstream.get()))) {
                     t_identifier.push_back(m_last_char);    // Push identifier character
                 }
@@ -111,7 +116,11 @@ namespace stxa
                     }
                     return (m_token_data.m_token = find_tok->second);   // Return token
                 }
-                return Token::T_IDENTIFIER;
+                return (m_token_data.m_token = Token::T_IDENTIFIER);
+            }
+
+            if (isBracket(m_last_char)) {
+                return Token::T_BRACKET;
             }
 
             if (findNumber(m_identifier)) {   // Parse number

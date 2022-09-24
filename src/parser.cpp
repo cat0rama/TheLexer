@@ -157,7 +157,6 @@ namespace stxa
         }
 
         std::string fn_name = m_identifier;
-        getNextToken();
 
         if (m_last_char != '(') {
             std::cout << "expected '(' in prototype" << std::endl;
@@ -192,6 +191,7 @@ namespace stxa
             auto proto = std::make_unique<FuncPrototype>("", std::vector<std::string>());
             return std::make_unique<FuncDefinition>(std::move(proto), std::move(E)); 
         }
+        return nullptr;
     }
 
     auto Parser::parseDefinition() -> expr_ptr<FuncDefinition>

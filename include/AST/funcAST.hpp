@@ -13,6 +13,11 @@ namespace stxa
         {   }
     public:
         const std::string& getName() const { return m_name; }
+
+        const std::vector<std::string>& getArgs() const 
+        {
+            return m_args;
+        }
     private:
         std::vector<std::string> m_args;
         std::string m_name;

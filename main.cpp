@@ -1,10 +1,10 @@
 #include "error.hpp"
-#include "token.hpp"
 #include "lexer.hpp"
 #include "parser.hpp"
+#include "token.hpp"
 
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <type_traits>
 
 using namespace stxa;
@@ -13,24 +13,21 @@ int main(int argc, char *argv[], char *envp[])
 {
     Parser lx("file.txt");
 
-    while (true) {
+    while (true)
+    {
         auto it = lx.getLastTokenData();
         if (it.m_token == Token::T_EOF) {
             break;
-        } else if (it.m_token == Token::T_FUNC) {
-            if (lx.parseDefinition()) {
-                std::cout << "parsed a function definition" << std::endl;
-            } else {
-                lx.getNextToken();
+        }
+
+        if (it.m_token == Token::T_EXTERN) {
+            auto ex = lx.parseExtern();
+            std::cout << "parsed extern" << std::endl;
+            std::cout << ex->getName() << std::endl;
+            for (const auto &a : ex->getArgs()) {
+                std::cout << a << std::endl;
             }
-        } else if (it.m_token == Token::T_EXTERN) {
-            if (lx.parseExtern()) {
-                    std::cout << "parsed a extern" << std::endl;
-            } else {
-                lx.getNextToken();
-            }
-        } else {
-            lx.getNextToken();
+            break;
         }
     }
 

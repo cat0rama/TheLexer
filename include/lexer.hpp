@@ -24,6 +24,7 @@ namespace stxa
 
         Lexer& operator=(const Lexer&) = delete;
     private:
+        auto isBracket(const char t_sym) const noexcept -> bool;
     // Methods for parse tokens
         auto findKeyword(std::string &t_identifier) -> bool;
 
