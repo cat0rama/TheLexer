@@ -93,6 +93,7 @@ namespace stxa
 
     auto Parser::parsePrimary() -> expr_ptr<>
     {
+        getNextToken();
         auto tok = getLastTokenData().m_token;
 
         if (tok == Token::T_IDENTIFIER) {

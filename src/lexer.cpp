@@ -13,6 +13,24 @@ namespace stxa
     m_fstream(t_file_name), m_token_data({Token::T_NULL, 0, {}}), m_last_char(0)
     {   }
 
+    auto Lexer::calculatePosition(const std::string& t_identifier) -> std::streampos
+    {
+        /* Finding the position of the token by calculating the string of the m_identifier and the position
+        in the file, thereby finding the beginning of the position of the token in the file */
+        std::streampos identifier_pos = 0;
+
+        if (m_next_char == EOF) {
+            m_fstream.seekg(0, std::ios::end);   // Go to end file
+            identifier_pos =   // Calculate position of m_identifier
+                m_fstream.tellg() - static_cast<std::streampos>(t_identifier.length());
+        } else {
+            identifier_pos =
+                m_fstream.tellg() - static_cast<std::streampos>(t_identifier.length());
+        }
+
+        return identifier_pos;
+    }
+
     auto Lexer::isBracket(const char t_sym) const noexcept -> bool
     {
         return t_sym == ')' || t_sym == '(';
@@ -105,16 +123,7 @@ namespace stxa
             if (findKeyword(m_identifier)) {    // Parse keyword
                 auto find_tok = g_identifiers_en.find(m_identifier);
                 if (find_tok != g_identifiers_en.end()) {
-                    /* Finding the position of the token by calculating the string of the m_identifier and the position
-                    in the file, thereby finding the beginning of the position of the token in the file */
-                    if (m_next_char == EOF) {
-                        m_fstream.seekg(0, std::ios::end);   // Go to end file
-                        m_token_data.m_file_ptr_pos =   // Calculate position of m_identifier
-                            m_fstream.tellg() - static_cast<std::streampos>(m_identifier.length());
-                    } else {
-                        m_token_data.m_file_ptr_pos =
-                            m_fstream.tellg() - static_cast<std::streampos>(m_identifier.length());
-                    }
+                    m_token_data.m_file_ptr_pos = calculatePosition(m_identifier);
                     return (m_token_data.m_token = find_tok->second);   // Return token
                 }
                 return (m_token_data.m_token = Token::T_IDENTIFIER);    // Return some word if token doesnt find
@@ -129,9 +138,11 @@ namespace stxa
                 if (std::count_if(m_identifier.begin(), m_identifier.end(),
                     [&](char &c) { return c == '.'; }) > 1)   // Count dots in string
                 {
+                    m_token_data.m_file_ptr_pos = 0;
                     m_token_data.m_data = {};   // Nulling std::variant
                     return (m_token_data.m_token = Token::T_ERROR);      // If find number with two and more points, return error
                 }
+                m_token_data.m_file_ptr_pos = calculatePosition(m_identifier);
                 return (m_token_data.m_token = Token::T_NUMBER);
             }
 

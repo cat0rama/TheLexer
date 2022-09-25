@@ -24,6 +24,9 @@ namespace stxa
 
         Lexer& operator=(const Lexer&) = delete;
     private:
+    // Other methods
+        auto calculatePosition(const std::string& t_identifier) -> std::streampos;
+
         auto isBracket(const char t_sym) const noexcept -> bool;
     // Methods for parse tokens
         auto findKeyword(std::string &t_identifier) -> bool;

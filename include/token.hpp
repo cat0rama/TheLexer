@@ -10,8 +10,8 @@ namespace stxa
     enum class Token : int
     {
         // End of file token
-        T_EOF = -1,
         T_ERROR = -2,
+        T_EOF = -1,
         T_NULL = 0,
         T_OTHER = 1,
 

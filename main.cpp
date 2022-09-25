@@ -23,7 +23,8 @@ int main(int argc, char *argv[], char *envp[])
                 std::cout << "parsed extern ";
                 auto args = ex->getArgs();  
                 std::cout << ex->getName() << " ";
-                std::copy(args.begin(), args.end(), std::ostream_iterator<std::string>(std::cout, ""));
+                std::copy(args.begin(), args.end(), std::ostream_iterator<std::string>(std::cout, " "));
+                std::cout << std::endl;
             } else {
                 std::cout << "signature is not defined" << std::endl;
             }
@@ -31,8 +32,9 @@ int main(int argc, char *argv[], char *envp[])
 
         if (it.m_token == Token::T_FUNC) {
             if (auto func = lx.parseDefinition()) {
-                std::cout << "parsed func";
+                std::cout << "parsed func ";
                 std::cout << func->getName() << std::endl;
+                std::cout << lx.getLastTokenData().m_file_ptr_pos << std::endl;
             } else {
                 std::cout << "signature is not defined" << std::endl;
             }
