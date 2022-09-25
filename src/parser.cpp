@@ -175,8 +175,6 @@ namespace stxa
             return nullptr;
         }
 
-        getNextToken();
-
         return std::make_unique<FuncPrototype>(fn_name, std::move(arg_names));
     }
 

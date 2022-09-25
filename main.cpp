@@ -15,15 +15,14 @@ int main(int argc, char *argv[], char *envp[])
 {
     Parser lx("file.txt");
 
-    while (lx.getLastTokenData().m_token != Token::T_EOF)
-    {
+    while (lx.getLastTokenData().m_token != Token::T_EOF) {
         auto it = lx.getLastTokenData();
-        
+
         if (it.m_token == Token::T_EXTERN) {
             if (auto ex = lx.parseExtern()){
                 std::cout << "parsed extern ";
-                auto args = ex->getArgs();
-                std::cout << ex->getName();
+                auto args = ex->getArgs();  
+                std::cout << ex->getName() << " ";
                 std::copy(args.begin(), args.end(), std::ostream_iterator<std::string>(std::cout, ""));
             } else {
                 std::cout << "signature is not defined" << std::endl;
