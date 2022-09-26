@@ -5,42 +5,41 @@
 #include "funcAST.hpp"
 #include "lexer.hpp"
 
-namespace stxa
-{
-    // Parser for parse difference values
-    class Parser : public Lexer
-    {
-        template<typename T = IExprAST>
-        using expr_ptr = std::unique_ptr<T>;
-    public:
-        Parser() = default;
+namespace stxa {
+// Parser for parse difference values
+class Parser : public Lexer {
+    template <typename T = IExprAST> using expr_ptr = std::unique_ptr<T>;
 
-        Parser(const std::string& t_file_name);
+  public:
+    Parser() = default;
 
-        ~Parser() noexcept = default;
-    public:
-        auto getTokPrecedence() -> int;
+    Parser(const std::string& t_file_name);
 
-        auto parseExpression() -> expr_ptr<>;
+    ~Parser() noexcept = default;
 
-        auto parseNumber() -> expr_ptr<>;
+  public:
+    auto getTokPrecedence() -> int;
 
-        auto parseParenExpr() -> expr_ptr<>;
+    auto parseExpression() -> expr_ptr<>;
 
-        auto parseIdentifier() -> expr_ptr<>;
+    auto parseNumber() -> expr_ptr<>;
 
-        auto parsePrototype() -> expr_ptr<FuncPrototype>;
+    auto parseParenExpr() -> expr_ptr<>;
 
-        auto parseDefinition() -> expr_ptr<FuncDefinition>;
+    auto parseIdentifier() -> expr_ptr<>;
 
-        auto parsePrimary() -> expr_ptr<>;
+    auto parsePrototype() -> expr_ptr<FuncPrototype>;
 
-        auto parseExtern() -> expr_ptr<FuncPrototype>;
+    auto parseDefinition() -> expr_ptr<FuncDefinition>;
 
-        auto parseTopLevelExpr() -> expr_ptr<FuncDefinition>;
+    auto parsePrimary() -> expr_ptr<>;
 
-        auto parseBinaryOpRHS(int expr_prec, expr_ptr<> lhs) -> expr_ptr<>;
-    };
-}
+    auto parseExtern() -> expr_ptr<FuncPrototype>;
+
+    auto parseTopLevelExpr() -> expr_ptr<FuncDefinition>;
+
+    auto parseBinaryOpRHS(int expr_prec, expr_ptr<> lhs) -> expr_ptr<>;
+};
+} // namespace stxa
 
 #endif

@@ -2,6 +2,9 @@
 # Prerequisites
 *.d
 
+# Other
+plan.txt
+
 # Directories
 build/
 .vscode/
