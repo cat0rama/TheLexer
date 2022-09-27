@@ -14,7 +14,11 @@ auto Parser::getTokPrecedence() -> int {
 
     auto tok_prec = g_binary_precedence.find(m_last_char);
 
-    if (tok_prec->second <= 0) {
+    if (tok_prec != g_binary_precedence.end()){
+        if (tok_prec->second <= 0) {
+            return -1;
+        }
+    } else {
         return -1;
     }
 
@@ -141,15 +145,18 @@ auto Parser::parseExpression() -> expr_ptr<> {
 }
 
 auto Parser::parsePrototype() -> expr_ptr<FuncPrototype> {
-    if (getLastTokenData().m_token != Token::T_IDENTIFIER) {
+    auto &data = getLastTokenData();
+
+    if (data.m_token != Token::T_IDENTIFIER) {
         std::cout << "Expected function name in prototype" << std::endl;
         return nullptr;
     }
 
     std::string fn_name = m_identifier;
+
     getNextToken();
 
-    if (m_last_char != '(') {
+    if (data.m_token != Token::T_OBRACKET) {
         std::cout << "Expected '(' in prototype" << std::endl;
         return nullptr;
     }
@@ -160,7 +167,7 @@ auto Parser::parsePrototype() -> expr_ptr<FuncPrototype> {
         arg_names.push_back(m_identifier);
     }
 
-    if (m_last_char != ')') {
+    if (data.m_token != Token::T_CBRACKET) {
         std::cout << "Expceted ')' in prototype" << std::endl;
         return nullptr;
     }

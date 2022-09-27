@@ -7,7 +7,6 @@
 #include <iostream>
 #include <iterator>
 #include <string>
-#include <type_traits>
 
 using namespace stxa;
 
@@ -32,12 +31,10 @@ int main(int argc, char* argv[], char* envp[]) {
             if (auto func = lx.parseDefinition()) {
                 std::cout << "parsed func ";
                 std::cout << func->getName() << std::endl;
-                std::cout << lx.getLastTokenData().m_file_ptr_pos << std::endl;
             } else {
                 std::cout << "signature is not defined" << std::endl;
             }
         }
-
         lx.getNextToken();
     }
 

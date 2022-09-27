@@ -18,6 +18,7 @@ class Parser : public Lexer {
     ~Parser() noexcept = default;
 
   public:
+// Methods for parse tokens
     auto getTokPrecedence() -> int;
 
     auto parseExpression() -> expr_ptr<>;

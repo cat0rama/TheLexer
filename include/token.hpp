@@ -24,8 +24,8 @@ enum class Token : int {
     T_NUMBER = 7,
 
     // Symbols
-    T_RBRACKET = 8,
-    T_LBRACKET = 9,
+    T_OBRACKET = 8,
+    T_CBRACKET = 9,
     T_SEMICOLON = 10
 };
 
