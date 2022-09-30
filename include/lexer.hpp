@@ -15,7 +15,7 @@ class Lexer {
 
     Lexer(const std::string& t_file_name);
 
-    virtual ~Lexer() noexcept = default;
+    ~Lexer() noexcept = default;
 
     // Delete copy constructor and operator assigment
     Lexer(const Lexer&) = delete;

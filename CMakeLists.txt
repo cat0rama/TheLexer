@@ -13,7 +13,9 @@ add_executable(STXA
     ${STXA_SOURCES}
 )
 
-# disable RTTI and exceptions
+add_subdirectory(vendor/spdlog)
+target_link_libraries(STXA PUBLIC spdlog)
 
+target_include_directories(STXA PRIVATE ${CMAKE_SOURCE_DIR}/vendor/spdlog)
 target_include_directories(STXA PRIVATE include/)
 target_include_directories(STXA PRIVATE include/AST)
