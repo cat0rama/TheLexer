@@ -1,5 +1,6 @@
 #include "parser.hpp"
 #include "identifier.hpp"
+#include "logger.hpp"
 
 #include <ctype.h>
 #include <iostream>
@@ -148,7 +149,7 @@ auto Parser::parsePrototype() -> expr_ptr<FuncPrototype> {
     auto &data = getLastTokenData();
 
     if (data.m_token != Token::T_IDENTIFIER) {
-        std::cout << "Expected function name in prototype" << std::endl;
+        std::cout << "expected function name in prototype" << std::endl;
         return nullptr;
     }
 
@@ -157,7 +158,7 @@ auto Parser::parsePrototype() -> expr_ptr<FuncPrototype> {
     getNextToken();
 
     if (data.m_token != Token::T_OBRACKET) {
-        std::cout << "Expected '(' in prototype" << std::endl;
+        LOG_CRITICAL("expected '(' bracket. {0}", data);
         return nullptr;
     }
 
@@ -168,7 +169,7 @@ auto Parser::parsePrototype() -> expr_ptr<FuncPrototype> {
     }
 
     if (data.m_token != Token::T_CBRACKET) {
-        std::cout << "Expceted ')' in prototype" << std::endl;
+        LOG_CRITICAL("expected '(' bracket. {0}", data);
         return nullptr;
     }
 

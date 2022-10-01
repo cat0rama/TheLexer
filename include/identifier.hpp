@@ -22,7 +22,7 @@ inline const std::unordered_map<std::string, Token> g_identifiers_en = {
 
 // Map for tokens to quickly look up values (Lezgi)
 inline const std::unordered_map<std::string, Token> g_identifiers_lez = {
-    
+
 };
 } // namespace stxa
 

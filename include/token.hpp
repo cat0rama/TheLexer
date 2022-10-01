@@ -36,6 +36,11 @@ struct TokenData {
     std::streampos m_file_ptr_pos;
     // Identifier data, number or string
     std::optional<std::variant<double, std::string>> m_data;
+    // Overload for formating log
+    template <typename outStream>
+    friend outStream& operator<<(outStream& t_stream, const TokenData& t_data) {
+        return t_stream << "string position: [" << t_data.m_file_ptr_pos << "]";
+    }
 };
 } // namespace stxa
 
