@@ -26,7 +26,8 @@ enum class Token : int {
     // Symbols
     T_OBRACKET = 8,
     T_CBRACKET = 9,
-    T_SEMICOLON = 10
+    T_SEMICOLON = 10,
+    T_COMMA = 11
 };
 
 struct TokenData {
@@ -39,7 +40,7 @@ struct TokenData {
     // Overload for formating log
     template <typename outStream>
     friend outStream& operator<<(outStream& t_stream, const TokenData& t_data) {
-        return t_stream << "string position: [" << t_data.m_file_ptr_pos << "]";
+        return t_stream << "begin position: [" << t_data.m_file_ptr_pos << "]";
     }
 };
 } // namespace stxa

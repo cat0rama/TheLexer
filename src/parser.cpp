@@ -28,9 +28,6 @@ auto Parser::getTokPrecedence() -> int {
 
 auto Parser::parseNumber() -> expr_ptr<NumberExpr> {
     auto result = std::make_unique<NumberExpr>(std::get<double>(getLastTokenData().m_data.value()));
-
-    getNextToken();
-
     return result;  // RVO will help me :)
 }
 
@@ -147,7 +144,7 @@ auto Parser::parseExpression() -> expr_ptr<> {
 
 auto Parser::parsePrototype() -> expr_ptr<FuncPrototype> {
     if ((*this)->m_token != Token::T_IDENTIFIER) {
-        std::cout << "expected function name in prototype" << std::endl;
+        LOG_CRITICAL("expected function name in prototype");
         return nullptr;
     }
 
@@ -167,7 +164,7 @@ auto Parser::parsePrototype() -> expr_ptr<FuncPrototype> {
     }
 
     if ((*this)->m_token != Token::T_CBRACKET) {
-        LOG_CRITICAL("expected '(' bracket. {0}", this->getLastTokenData());
+        LOG_CRITICAL("expected ')' bracket. {0}", this->getLastTokenData());
         return nullptr;
     }
 

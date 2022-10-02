@@ -32,7 +32,7 @@ auto Lexer::isBracket(const char t_sym) const noexcept -> bool {
 
 // Parse keywords
 auto Lexer::findKeyword(std::string& t_identifier) -> bool {
-    if (std::isalpha(m_last_char)) {    // Check if symbol is char
+    if (std::isalpha(m_last_char)) { // Check if symbol is char
         t_identifier = m_last_char;
         while ((m_next_char = m_fstream.peek()) != EOF && m_next_char != '\n' &&
                m_next_char != ' ' && !isBracket(m_next_char)) {
@@ -47,7 +47,7 @@ auto Lexer::findKeyword(std::string& t_identifier) -> bool {
 
 // Parse number
 auto Lexer::findNumber(std::string& t_identifier) -> bool {
-    if (std::isdigit(m_last_char)) {    // Check if symbol is number
+    if (std::isdigit(m_last_char)) { // Check if symbol is number
         m_token_data.m_file_ptr_pos =
             m_fstream.tellg() - std::streampos(1); // Get start number position
         t_identifier = m_last_char;
@@ -94,10 +94,7 @@ auto Lexer::openFile(const std::string& t_file_name) noexcept -> Code {
     return Code::SUCCES;
 }
 
-auto Lexer::operator->() const noexcept -> const TokenData*
-{
-    return &m_token_data;
-}
+auto Lexer::operator->() const noexcept -> const TokenData* { return &m_token_data; }
 
 // Get tokens from file
 auto Lexer::getNextToken() -> Token {
@@ -123,24 +120,23 @@ auto Lexer::getNextToken() -> Token {
                         Token::T_IDENTIFIER); // Return some word if token doesnt find
         }
 
-        auto find_sym = g_symbols.find(m_last_char);  // Find specific symbols
+        auto find_sym = g_symbols.find(m_last_char); // Find specific symbols
         if (find_sym != g_symbols.end()) {
             m_token_data.m_file_ptr_pos = calculatePosition((std::string() += m_last_char));
             return (m_token_data.m_token = find_sym->second);
         }
 
         if (findNumber(m_identifier)) { // Parse number
+            m_token_data.m_token = Token::T_NUMBER;
             if (std::count_if(m_identifier.begin(), m_identifier.end(),
                               [&](char& c) { return c == '.'; }) > 1) // Count dots in string
             {
-                m_token_data.m_file_ptr_pos = 0;
-                m_token_data.m_data = {}; // Nulling std::variant
-                return (
-                    m_token_data.m_token =
-                        Token::T_ERROR); // If find number with two and more points, return error
+                m_token_data.m_data = "more than one point found. {0}"; // Error transmission
+                m_token_data.m_token =
+                    Token::T_ERROR; // If find number with two and more points, return error
             }
             m_token_data.m_file_ptr_pos = calculatePosition(m_identifier);
-            return (m_token_data.m_token = Token::T_NUMBER);
+            return m_token_data.m_token;
         }
 
         if (findComment()) { // Parse comment for skip it, but save read ptr position
