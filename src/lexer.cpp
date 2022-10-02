@@ -32,7 +32,7 @@ auto Lexer::isBracket(const char t_sym) const noexcept -> bool {
 
 // Parse keywords
 auto Lexer::findKeyword(std::string& t_identifier) -> bool {
-    if (std::isalpha(m_last_char)) {
+    if (std::isalpha(m_last_char)) {    // Check if symbol is char
         t_identifier = m_last_char;
         while ((m_next_char = m_fstream.peek()) != EOF && m_next_char != '\n' &&
                m_next_char != ' ' && !isBracket(m_next_char)) {
@@ -47,7 +47,7 @@ auto Lexer::findKeyword(std::string& t_identifier) -> bool {
 
 // Parse number
 auto Lexer::findNumber(std::string& t_identifier) -> bool {
-    if (std::isdigit(m_last_char)) {
+    if (std::isdigit(m_last_char)) {    // Check if symbol is number
         m_token_data.m_file_ptr_pos =
             m_fstream.tellg() - std::streampos(1); // Get start number position
         t_identifier = m_last_char;
@@ -94,6 +94,11 @@ auto Lexer::openFile(const std::string& t_file_name) noexcept -> Code {
     return Code::SUCCES;
 }
 
+auto Lexer::operator->() const noexcept -> const TokenData*
+{
+    return &m_token_data;
+}
+
 // Get tokens from file
 auto Lexer::getNextToken() -> Token {
     while (m_fstream) {
@@ -118,8 +123,7 @@ auto Lexer::getNextToken() -> Token {
                         Token::T_IDENTIFIER); // Return some word if token doesnt find
         }
 
-        // Find specific symbols
-        auto find_sym = g_symbols.find(m_last_char);
+        auto find_sym = g_symbols.find(m_last_char);  // Find specific symbols
         if (find_sym != g_symbols.end()) {
             m_token_data.m_file_ptr_pos = calculatePosition((std::string() += m_last_char));
             return (m_token_data.m_token = find_sym->second);

@@ -9,7 +9,6 @@ namespace stxa {
 // Parser for parse difference values
 class Parser : public Lexer {
     template <typename T = IExprAST> using expr_ptr = std::unique_ptr<T>;
-
   public:
     Parser() = default;
 
@@ -23,7 +22,7 @@ class Parser : public Lexer {
 
     auto parseExpression() -> expr_ptr<>;
 
-    auto parseNumber() -> expr_ptr<>;
+    auto parseNumber() -> expr_ptr<NumberExpr>;
 
     auto parseParenExpr() -> expr_ptr<>;
 

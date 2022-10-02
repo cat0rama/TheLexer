@@ -26,12 +26,12 @@ auto Parser::getTokPrecedence() -> int {
     return tok_prec->second;
 }
 
-auto Parser::parseNumber() -> expr_ptr<> {
+auto Parser::parseNumber() -> expr_ptr<NumberExpr> {
     auto result = std::make_unique<NumberExpr>(std::get<double>(getLastTokenData().m_data.value()));
 
     getNextToken();
 
-    return std::move(result);
+    return result;  // RVO will help me :)
 }
 
 auto Parser::parseParenExpr() -> expr_ptr<> {
@@ -146,9 +146,7 @@ auto Parser::parseExpression() -> expr_ptr<> {
 }
 
 auto Parser::parsePrototype() -> expr_ptr<FuncPrototype> {
-    auto &data = getLastTokenData();
-
-    if (data.m_token != Token::T_IDENTIFIER) {
+    if ((*this)->m_token != Token::T_IDENTIFIER) {
         std::cout << "expected function name in prototype" << std::endl;
         return nullptr;
     }
@@ -157,8 +155,8 @@ auto Parser::parsePrototype() -> expr_ptr<FuncPrototype> {
 
     getNextToken();
 
-    if (data.m_token != Token::T_OBRACKET) {
-        LOG_CRITICAL("expected '(' bracket. {0}", data);
+    if ((*this)->m_token != Token::T_OBRACKET) {
+        LOG_CRITICAL("expected '(' bracket. {0}", this->getLastTokenData());
         return nullptr;
     }
 
@@ -168,8 +166,8 @@ auto Parser::parsePrototype() -> expr_ptr<FuncPrototype> {
         arg_names.push_back(m_identifier);
     }
 
-    if (data.m_token != Token::T_CBRACKET) {
-        LOG_CRITICAL("expected '(' bracket. {0}", data);
+    if ((*this)->m_token != Token::T_CBRACKET) {
+        LOG_CRITICAL("expected '(' bracket. {0}", this->getLastTokenData());
         return nullptr;
     }
 

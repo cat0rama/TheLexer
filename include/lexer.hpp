@@ -36,9 +36,11 @@ class Lexer {
 
   public:
     // Encapsulation of some ifstream methods
-    operator bool() const noexcept;
-
     auto openFile(const std::string& t_file_name) noexcept -> Code;
+
+    operator bool() const noexcept;
+    // Operator for easier access data
+    auto operator->() const noexcept -> const TokenData*;
 
     // Methods for work with tokens
     auto getNextToken() -> Token;

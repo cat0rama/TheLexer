@@ -25,6 +25,7 @@ class NumberExpr : public IExprAST {
 
     ~NumberExpr() = default;
 
+    double getNumber() const noexcept { return m_number; } 
   private:
     double m_number;
 };
