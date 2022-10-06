@@ -1,52 +1,59 @@
 #include "error.hpp"
-#include "token.hpp"
 #include "lexer.hpp"
+#include "logger.hpp"
 #include "parser.hpp"
+#include "token.hpp"
 
-#include <iostream>
 #include <iomanip>
-#include <type_traits>
+#include <iostream>
+#include <iterator>
+#include <string>
 
 using namespace stxa;
 
-int main(int argc, char *argv[], char *envp[])
-{
-    Lexer lx("file.txt");
+int main(int argc, char* argv[], char* envp[]) {
+    Parser lx;
 
-    if (lx) {
-        Token token;
-        while ((token = lx.getNextToken()) != Token::T_EOF) {
-            switch (token)
-            {
-            case Token::T_FUNC:
-                std::cout << "func detected: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
-                break;
-            case Token::T_EXTERN:
-                std::cout << "extern detected: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
-                break;
-            case Token::T_RETURN:
-                std::cout << "return detected: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
-                break;
-            case Token::T_NUMBER:
-                std::cout << std::setprecision(10);
-                std::cout << "number detected: " << std::get<double>(lx.getLastTokenData().m_data.value()) << std::endl;
-                std::cout << "number pos: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
-                break;
-            case Token::T_ERROR:
-                std::cout << "unable to parse number with two and more points." << std::endl;
-                std::cout << "error pos: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
-                std::cout << std::get<std::string>(lx.getLastTokenData().m_data.value_or("identifier doesnt exist")) << std::endl;
-                break;
-            case Token::T_EOF:
-                std::cout << "END OF FILE!" << std::endl;
-                break;
-            case Token::T_COMMENT:
-                std::cout << "comment detected: " << lx.getLastTokenData().m_file_ptr_pos << std::endl;
-                break;
+    if (lx.openFile("file.txt") != Code::FILE_OPEN_ERROR) {
+        auto& it = lx.getLastTokenData();
+        lx.getNextToken();
+        while (it.m_token != Token::T_EOF) { // Main loop
+            if (it.m_token == Token::T_EXTERN) {
+                if (auto ex = lx.parseExtern(); ex) {
+                    std::cout << "parsed extern ";
+                    auto args = ex->getArgs();
+                    std::cout << ex->getName() << " ";
+                    std::copy(args.begin(), args.end(),
+                              std::ostream_iterator<std::string>(std::cout, " "));
+                    std::cout << std::endl;
+                } else {
+                    // break;
+                }
+            } else if (it.m_token == Token::T_FUNC) {
+                if (auto func = lx.parseDefinition(); func) {
+                    std::cout << "parsed func ";
+                    std::cout << func->getName() << std::endl;
+                } else {
+                    // break;
+                }
+            } else if (it.m_token == Token::T_NUMBER) {
+                if (auto numb = lx.parseNumber(); numb) {
+                    std::cout << "parsed number: " << numb->getNumber() << std::endl;
+                    std::cout << it << std::endl;
+                }
+            } else if (it.m_token == Token::T_IDENTIFIER) {
+                std::cout << "Is ident" << std::endl;
             }
+            
+            else if (it.m_token == Token::T_ERROR) {
+                LOG_CRITICAL(std::get<std::string>(it.m_data.value()), it);
+                // break;
+            }
+            lx.getNextToken();
         }
+        LOG_INFO("end of analysis file");
     } else {
-        std::cout << "unable to open file" << std::endl;
+        LOG_CRITICAL("file doesnt exist");
     }
 
     return 0;
