@@ -26,6 +26,7 @@ auto Lexer::calculatePosition(const std::string& t_identifier) -> std::streampos
     return identifier_pos;
 }
 
+// Checking character for parenthesis
 auto Lexer::isBracket(const char t_sym) const noexcept -> bool {
     return t_sym == ')' || t_sym == '(';
 }
@@ -48,8 +49,6 @@ auto Lexer::findKeyword(std::string& t_identifier) -> bool {
 // Parse number
 auto Lexer::findNumber(std::string& t_identifier) -> bool {
     if (std::isdigit(m_last_char)) { // Check if symbol is number
-        m_token_data.m_file_ptr_pos =
-            m_fstream.tellg() - std::streampos(1); // Get start number position
         t_identifier = m_last_char;
         while ((m_next_char = m_fstream.peek()) != EOF && m_next_char != '\n' &&
                m_next_char != ' ') {
@@ -112,12 +111,12 @@ auto Lexer::getNextToken() -> Token {
 
         if (findKeyword(m_identifier)) { // Parse keyword
             auto find_tok = g_identifiers_en.find(m_identifier);
+            m_token_data.m_token = Token::T_IDENTIFIER;
             if (find_tok != g_identifiers_en.end()) {
-                m_token_data.m_file_ptr_pos = calculatePosition(m_identifier);
-                return (m_token_data.m_token = find_tok->second); // Return token
+                m_token_data.m_token = find_tok->second; // Get token from map
             }
-            return (m_token_data.m_token =
-                        Token::T_IDENTIFIER); // Return some word if token doesnt find
+            m_token_data.m_file_ptr_pos = calculatePosition(m_identifier);
+            return m_token_data.m_token; // Return some word if token doesnt find else return IDENTIFIER
         }
 
         auto find_sym = g_symbols.find(m_last_char); // Find specific symbols

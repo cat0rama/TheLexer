@@ -16,6 +16,7 @@ int main(int argc, char* argv[], char* envp[]) {
 
     if (lx.openFile("file.txt") != Code::FILE_OPEN_ERROR) {
         auto& it = lx.getLastTokenData();
+        lx.getNextToken();
         while (it.m_token != Token::T_EOF) { // Main loop
             if (it.m_token == Token::T_EXTERN) {
                 if (auto ex = lx.parseExtern(); ex) {
@@ -38,8 +39,13 @@ int main(int argc, char* argv[], char* envp[]) {
             } else if (it.m_token == Token::T_NUMBER) {
                 if (auto numb = lx.parseNumber(); numb) {
                     std::cout << "parsed number: " << numb->getNumber() << std::endl;
+                    std::cout << it << std::endl;
                 }
-            } else if (it.m_token == Token::T_ERROR) {
+            } else if (it.m_token == Token::T_IDENTIFIER) {
+                std::cout << "Is ident" << std::endl;
+            }
+            
+            else if (it.m_token == Token::T_ERROR) {
                 LOG_CRITICAL(std::get<std::string>(it.m_data.value()), it);
                 // break;
             }
