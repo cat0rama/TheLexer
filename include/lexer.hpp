@@ -26,7 +26,7 @@ class Lexer {
     // Other methods
     auto calculatePosition(const std::string& t_identifier) -> std::streampos;
 
-    auto isBracket(const char t_sym) const noexcept -> bool;
+    auto isSymbol(const char t_sym) const noexcept -> bool;
     // Methods for find tokens
     auto findKeyword(std::string& t_identifier) -> bool;
 

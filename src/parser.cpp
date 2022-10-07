@@ -15,7 +15,7 @@ auto Parser::getTokPrecedence() -> int {
 
     auto tok_prec = g_binary_precedence.find(m_last_char);
 
-    if (tok_prec != g_binary_precedence.end()){
+    if (tok_prec != g_binary_precedence.end()) {
         if (tok_prec->second <= 0) {
             return -1;
         }
@@ -28,7 +28,7 @@ auto Parser::getTokPrecedence() -> int {
 
 auto Parser::parseNumber() -> expr_ptr<NumberExpr> {
     auto result = std::make_unique<NumberExpr>(std::get<double>(getLastTokenData().m_data.value()));
-    return result;  // RVO will help me :)
+    return result; // RVO will help me :)
 }
 
 auto Parser::parseParenExpr() -> expr_ptr<> {
@@ -88,13 +88,12 @@ auto Parser::parseIdentifier() -> expr_ptr<> {
 
 auto Parser::parsePrimary() -> expr_ptr<> {
     getNextToken();
-    auto tok = getLastTokenData().m_token;
 
-    if (tok == Token::T_IDENTIFIER) {
+    if ((*this)->m_token == Token::T_IDENTIFIER) {
         return parseIdentifier();
-    } else if (tok == Token::T_NUMBER) {
+    } else if ((*this)->m_token == Token::T_NUMBER) {
         return parseNumber();
-    } else if (m_last_char == '(') {
+    } else if ((*this)->m_token == Token::T_OBRACKET) {
         return parseParenExpr();
     }
 
@@ -148,19 +147,22 @@ auto Parser::parsePrototype() -> expr_ptr<FuncPrototype> {
         return nullptr;
     }
 
-    std::string fn_name = m_identifier;
+    std::string func_name = m_identifier;
 
-    getNextToken();
-
-    if ((*this)->m_token != Token::T_OBRACKET) {
+    if (getNextToken(); (*this)->m_token != Token::T_OBRACKET) {
         LOG_CRITICAL("expected '(' bracket. {0}", this->getLastTokenData());
         return nullptr;
     }
 
     std::vector<std::string> arg_names;
 
-    while (getNextToken() == Token::T_IDENTIFIER) {
-        arg_names.push_back(m_identifier);
+    while ((*this)->m_token != Token::T_CBRACKET) {
+        if (getNextToken() == Token::T_IDENTIFIER) {
+            arg_names.push_back(m_identifier);
+            if (getNextToken() != Token::T_COMMA) {
+                break;
+            }
+        }
     }
 
     if ((*this)->m_token != Token::T_CBRACKET) {
@@ -168,7 +170,7 @@ auto Parser::parsePrototype() -> expr_ptr<FuncPrototype> {
         return nullptr;
     }
 
-    return std::make_unique<FuncPrototype>(fn_name, std::move(arg_names));
+    return std::make_unique<FuncPrototype>(func_name, std::move(arg_names));
 }
 
 auto Parser::parseExtern() -> expr_ptr<FuncPrototype> {
