@@ -41,10 +41,7 @@ int main(int argc, char* argv[], char* envp[]) {
                     std::cout << "parsed number: " << numb->getNumber() << std::endl;
                     std::cout << it << std::endl;
                 }
-            } else if (it.m_token == Token::T_IDENTIFIER) {
-                std::cout << "Is ident" << std::endl;
             }
-            
             else if (it.m_token == Token::T_ERROR) {
                 LOG_CRITICAL(std::get<std::string>(it.m_data.value()), it);
                 // break;

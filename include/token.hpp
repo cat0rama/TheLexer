@@ -30,7 +30,13 @@ enum class Token : int {
     T_COMMA = 11
 };
 
+enum class MathToken : int {
+
+};
+
 struct TokenData {
+    TokenData() : m_token(Token::T_NULL), m_file_ptr_pos(0), m_data({}) {}
+
     // Token
     Token m_token;
     // File pointer position after identifier

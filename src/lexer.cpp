@@ -5,10 +5,10 @@
 #include <iostream>
 
 namespace stxa {
-Lexer::Lexer() : m_token_data({Token::T_NULL, 0, {}}), m_last_char(0) {}
+Lexer::Lexer() : m_last_char(0) {}
 
 Lexer::Lexer(const std::string& t_file_name)
-    : m_fstream(t_file_name), m_token_data({Token::T_NULL, 0, {}}), m_last_char(0) {}
+    : m_fstream(t_file_name), m_last_char(0) {}
 
 auto Lexer::calculatePosition(const std::string& t_identifier) -> std::streampos {
     /* Finding the position of the token by calculating the string of the m_identifier and the
@@ -26,9 +26,10 @@ auto Lexer::calculatePosition(const std::string& t_identifier) -> std::streampos
     return identifier_pos;
 }
 
-// Checking character for parenthesis
-auto Lexer::isBracket(const char t_sym) const noexcept -> bool {
-    return t_sym == ')' || t_sym == '(';
+// Check if char is special symbol
+auto Lexer::isSymbol(const char t_sym) const noexcept -> bool
+{
+    return g_symbols.find(t_sym) != g_symbols.end();
 }
 
 // Parse keywords
@@ -36,7 +37,7 @@ auto Lexer::findKeyword(std::string& t_identifier) -> bool {
     if (std::isalpha(m_last_char)) { // Check if symbol is char
         t_identifier = m_last_char;
         while ((m_next_char = m_fstream.peek()) != EOF && m_next_char != '\n' &&
-               m_next_char != ' ' && !isBracket(m_next_char)) {
+               m_next_char != ' ' && !isSymbol(m_next_char)) {
             if (std::isalnum((m_last_char = m_fstream.get()))) {
                 t_identifier.push_back(m_last_char); // Push identifier character
             }
