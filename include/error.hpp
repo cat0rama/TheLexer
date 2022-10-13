@@ -1,7 +1,7 @@
-#ifndef STXA_ERROR_HPP
-#define STXA_ERROR_HPP
+#ifndef LEXER_ERROR_HPP
+#define LEXER_ERROR_HPP
 
-namespace stxa {
+namespace lexer {
 enum class Code : int {
     // Error codes
     UNKNOWN_ERROR = -2,

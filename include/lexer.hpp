@@ -1,5 +1,5 @@
-#ifndef STXA_LEXER_HPP
-#define STXA_LEXER_HPP
+#ifndef LEXER_LEXER_HPP
+#define LEXER_LEXER_HPP
 
 #include "error.hpp"
 #include "token.hpp"
@@ -7,7 +7,7 @@
 #include <fstream>
 #include <string>
 
-namespace stxa {
+namespace lexer {
 // Lexer for parsing tokens from file.
 class Lexer {
   public:
@@ -60,6 +60,6 @@ class Lexer {
   protected:
     std::string m_identifier;
 };
-} // namespace stxa
+} // namespace lexer
 
 #endif

@@ -1,11 +1,11 @@
-#ifndef STXA_TOKEN_HPP
-#define STXA_TOKEN_HPP
+#ifndef LEXER_TOKEN_HPP
+#define LEXER_TOKEN_HPP
 
 #include <ios>
 #include <optional>
 #include <variant>
 
-namespace stxa {
+namespace lexer {
 enum class Token : int {
     // End of file token
     T_ERROR = -2,
@@ -49,6 +49,6 @@ struct TokenData {
         return t_stream << "begin position: [" << t_data.m_file_ptr_pos << "]";
     }
 };
-} // namespace stxa
+} // namespace lexer
 
 #endif
