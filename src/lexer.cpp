@@ -129,7 +129,7 @@ auto Lexer::getNextToken() -> Token {
         if (findNumber(m_identifier)) { // Parse number
             m_token_data.m_token = Token::T_NUMBER;
             if (std::count_if(m_identifier.begin(), m_identifier.end(),
-                              [&](char& c) { return c == '.'; }) > 1) // Count dots in string
+                              [&](char c) { return c == '.'; }) > 1) // Count dots in string
             {
                 m_token_data.m_data = "more than one point found. {0}"; // Error transmission
                 m_token_data.m_token =
