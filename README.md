@@ -1,2 +1,2 @@
-# STXA
-Own implementation of the language frontend using LLVM.
+# TheLexer
+A simple lexer to parse your files.
