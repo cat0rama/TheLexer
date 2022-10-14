@@ -12,7 +12,9 @@ add_library(${PROJECT_NAME} STATIC
     ${LEXER_SOURCES}
 )
 
+add_subdirectory(vendor/googletest)
 add_subdirectory(vendor/spdlog)
+add_subdirectory(tests)
 add_subdirectory(example)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC spdlog)
