@@ -27,11 +27,10 @@ enum class Token : int {
     T_OBRACKET = 8,
     T_CBRACKET = 9,
     T_SEMICOLON = 10,
-    T_COMMA = 11
-};
-
-enum class MathToken : int {
-
+    T_COMMA = 11,
+    T_EQUAL = 12,
+    T_STRING = 13,
+    T_sNUMBER = 14
 };
 
 struct TokenData {
