@@ -113,10 +113,12 @@ auto Lexer::getNextToken() -> Token {
         if (findKeyword(m_identifier)) { // Parse keyword
             auto find_tok = g_identifiers_en.find(m_identifier);
             m_token_data.m_token = Token::T_IDENTIFIER;
+            m_token_data.m_file_ptr_pos = calculatePosition(m_identifier);
             if (find_tok != g_identifiers_en.end()) {
                 m_token_data.m_token = find_tok->second; // Get token from map
+            } else {
+                m_token_data.m_data = std::move(m_identifier); // If token is identifier, we will save it
             }
-            m_token_data.m_file_ptr_pos = calculatePosition(m_identifier);
             return m_token_data.m_token; // Return some word if token doesnt find else return IDENTIFIER
         }
 

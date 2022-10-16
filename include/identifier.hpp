@@ -18,8 +18,8 @@ inline const std::unordered_map<std::string, Token>
     g_identifiers_en = {{"func", Token::T_FUNC},
                         {"extern", Token::T_EXTERN},
                         {"return", Token::T_RETURN},
-                        {"string", Token::T_STRING},
-                        {"number", Token::T_sNUMBER}};
+                        {"name", Token::T_NAME},
+                        {"age", Token::T_AGE}};
 
 } // namespace lexer
 

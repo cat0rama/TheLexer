@@ -29,8 +29,8 @@ enum class Token : int {
     T_SEMICOLON = 10,
     T_COMMA = 11,
     T_EQUAL = 12,
-    T_STRING = 13,
-    T_sNUMBER = 14
+    T_NAME = 13,
+    T_AGE = 14
 };
 
 struct TokenData {
