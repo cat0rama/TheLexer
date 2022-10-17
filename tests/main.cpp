@@ -8,7 +8,7 @@ TEST(LOL, test1)
 
 TEST(LOL, test2)
 {
-       
+    
 }
 
 int main(int argc, char* argv[], char* envp[]) 

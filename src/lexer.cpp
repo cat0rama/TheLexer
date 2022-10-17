@@ -5,9 +5,10 @@
 #include <iostream>
 
 namespace lexer {
-Lexer::Lexer() : m_last_char(0) {}
+Lexer::Lexer() : m_last_char(0), m_next_char(0) {}
 
-Lexer::Lexer(const std::string& t_file_name) : m_fstream(t_file_name), m_last_char(0) {}
+Lexer::Lexer(const std::string& t_file_name)
+    : m_fstream(t_file_name), m_last_char(0), m_next_char(0) {}
 
 auto Lexer::calculatePosition(const std::string& t_identifier) -> std::streampos {
     /* Finding the position of the token by calculating the string of the m_identifier and the
