@@ -42,10 +42,12 @@ class Lexer {
     // Operator for easier access data
     auto operator->() const noexcept -> const TokenData*;
 
-    // Methods for work with tokens
+    // Methods for data
     auto getNextToken() -> Token;
 
     auto getLastTokenData() const -> const TokenData&;
+
+    template <typename T> auto getValue() const -> const T;
 
   private:
     std::ifstream m_fstream;
@@ -60,6 +62,19 @@ class Lexer {
   protected:
     std::string m_identifier;
 };
+
+// Get value from std::variant with type casting from double to T(integral or real) and string
+// if needed
+template <typename T> auto Lexer::getValue() const -> const T {
+    if constexpr ((std::is_integral_v<T> ||
+                   std::is_floating_point_v<T>)) { // Check if type is number
+        return static_cast<T>(
+            std::get<double>(m_token_data.m_data.value_or(0))); // Return type with cast
+    } else {
+        return std::get<std::string>(m_token_data.m_data.value_or("null")); // Else return string
+    }
+}
+
 } // namespace lexer
 
 #endif

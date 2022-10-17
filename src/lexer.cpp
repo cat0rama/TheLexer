@@ -7,8 +7,7 @@
 namespace lexer {
 Lexer::Lexer() : m_last_char(0) {}
 
-Lexer::Lexer(const std::string& t_file_name)
-    : m_fstream(t_file_name), m_last_char(0) {}
+Lexer::Lexer(const std::string& t_file_name) : m_fstream(t_file_name), m_last_char(0) {}
 
 auto Lexer::calculatePosition(const std::string& t_identifier) -> std::streampos {
     /* Finding the position of the token by calculating the string of the m_identifier and the
@@ -27,8 +26,7 @@ auto Lexer::calculatePosition(const std::string& t_identifier) -> std::streampos
 }
 
 // Check if char is special symbol
-auto Lexer::isSymbol(const char t_sym) const noexcept -> bool
-{
+auto Lexer::isSymbol(const char t_sym) const noexcept -> bool {
     return g_symbols.find(t_sym) != g_symbols.end();
 }
 
@@ -117,9 +115,11 @@ auto Lexer::getNextToken() -> Token {
             if (find_tok != g_identifiers_en.end()) {
                 m_token_data.m_token = find_tok->second; // Get token from map
             } else {
-                m_token_data.m_data = std::move(m_identifier); // If token is identifier, we will save it
+                m_token_data.m_data =
+                    std::move(m_identifier); // If token is identifier, we will save it
             }
-            return m_token_data.m_token; // Return some word if token doesnt find else return IDENTIFIER
+            return m_token_data
+                .m_token; // Return some word if token doesnt find else return IDENTIFIER
         }
 
         auto find_sym = g_symbols.find(m_last_char); // Find specific symbols
