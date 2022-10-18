@@ -93,14 +93,16 @@ auto Lexer::openFile(const std::string& t_file_name) noexcept -> Code {
     return Code::SUCCES;
 }
 
+// Close file
+void Lexer::closeFile() noexcept { m_fstream.close(); }
+
 auto Lexer::operator->() const noexcept -> const TokenData* { return &m_token_data; }
 
 // Get tokens from file
 auto Lexer::getNextToken() -> Token {
     while (m_fstream) {
         if (m_next_char == EOF || m_fstream.peek() == EOF) { // Parse end of file
-            m_token_data.m_file_ptr_pos = 0;
-            m_token_data.m_data = {};
+            clearData();
             return (m_token_data.m_token = Token::T_EOF);
         }
 
@@ -143,8 +145,7 @@ auto Lexer::getNextToken() -> Token {
         }
 
         if (findComment()) { // Parse comment for skip it, but save read ptr position
-            m_token_data.m_file_ptr_pos = 0;
-            m_token_data.m_data = {};
+            clearData();
             return (m_token_data.m_token = Token::T_COMMENT);
         }
     }
@@ -155,6 +156,12 @@ auto Lexer::getNextToken() -> Token {
 auto Lexer::getLastTokenData() const -> const TokenData& {
     return m_token_data; // Get token data(token, value(std::variant<double, string>), file ptr
                          // position)
+}
+
+// Clear data
+auto Lexer::clearData() noexcept -> void {
+    m_token_data.m_file_ptr_pos = 0;
+    m_token_data.m_data = {};
 }
 
 } // namespace lexer

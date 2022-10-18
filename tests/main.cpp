@@ -1,14 +1,28 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <lexer.hpp>
 
-TEST(LOL, test1)
+using namespace lexer;
+
+TEST(Numbers, numbers_test)
 {
-    ASSERT_TRUE(1 == 1);
+    Lexer file("numbers.txt");
+
+    ASSERT_EQ(file.operator bool(), true);
+
+    // проверка на равенство
+    EXPECT_STREQ("ddw", "ddw"); // для строк
+    EXPECT_EQ(2, 2 + 0); // для чисел
 }
 
-TEST(LOL, test2)
+TEST(Tokens, tokens_test)
 {
     
+}
+
+TEST(Errors, all_errors_test)
+{
+
 }
 
 int main(int argc, char* argv[], char* envp[]) 

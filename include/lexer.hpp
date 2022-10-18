@@ -38,6 +38,8 @@ class Lexer {
     // Encapsulation of some ifstream methods
     auto openFile(const std::string& t_file_name) noexcept -> Code;
 
+    auto closeFile() noexcept -> void;
+
     operator bool() const noexcept;
     // Operator for easier access data
     auto operator->() const noexcept -> const TokenData*;
@@ -49,6 +51,7 @@ class Lexer {
 
     template <typename T> auto getValue() const -> const T;
 
+    auto clearData() noexcept -> void;
   private:
     std::ifstream m_fstream;
     // Variable for store token metadata (token, value(C++ union), file ptr posiotion)
