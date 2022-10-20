@@ -4,18 +4,17 @@
 
 using namespace lexer;
 
-TEST(Tokens, numbers_test)
-{
+TEST(Tokens, numbers_test) {
     Lexer file("numbers.txt");
 
-    ASSERT_EQ(file.operator bool(), true);
+    EXPECT_EQ(file.operator bool(), true);
 
     file.getNextToken();
 
     EXPECT_EQ(4, file.getValue<int>());
 
     file.getNextToken();
-    
+
     EXPECT_EQ(78, file.getValue<int>());
 
     file.getNextToken();
@@ -43,33 +42,83 @@ TEST(Tokens, numbers_test)
     EXPECT_DOUBLE_EQ(312.23343139, file.getValue<double>());
 
     // проверка на равенство
-    //EXPECT_STREQ("ddw", "ddw"); // для строк
-    //EXPECT_EQ(2, 2 + 0); // для чисел
+    // EXPECT_STREQ("ddw", "ddw"); // для строк
+    // EXPECT_EQ(2, 2 + 0); // для чисел
 }
 
-TEST(Tokens, tokens_test)
-{
+TEST(Tokens, nums_tokens_test) {
+    Lexer file("numbers&tokens.txt");
+
+    EXPECT_EQ(file.operator bool(), true);
+
+    auto& data = file.getLastTokenData();
+
+    file.getNextToken();
+
+    EXPECT_EQ(Token::T_FUNC, data.m_token);
+
+    file.getNextToken();
     
+    EXPECT_EQ(Token::T_EXTERN, data.m_token);
+
+    file.getNextToken();
+
+    EXPECT_EQ(Token::T_NAME, data.m_token);
+
+    file.getNextToken();
+
+    EXPECT_EQ(Token::T_NUMBER, data.m_token);
+
+    file.getNextToken();
+
+    EXPECT_EQ(Token::T_IDENTIFIER, data.m_token);
+
+    file.getNextToken();
+
+    EXPECT_EQ(Token::T_NUMBER, data.m_token);
+
+    file.getNextToken();
+
+    EXPECT_EQ(Token::T_AGE, data.m_token);
+
+    file.getNextToken();
+
+    EXPECT_EQ(Token::T_IDENTIFIER, data.m_token);
 }
 
-TEST(Tokens, symbols_test)
-{
+TEST(Tokens, symbols_test) {
+    Lexer file("symbols.txt");
 
+    EXPECT_EQ(file.operator bool(), true);
+
+    auto& data = file.getLastTokenData();
+
+    file.getNextToken();
+
+    EXPECT_EQ(Token::T_SEMICOLON, data.m_token);
+
+    file.getNextToken();
+
+    EXPECT_EQ(Token::T_OBRACKET, data.m_token);
+
+    file.getNextToken();
+
+    EXPECT_EQ(Token::T_CBRACKET, data.m_token);
+
+    file.getNextToken();
+
+    EXPECT_EQ(Token::T_COMMA, data.m_token);
+
+    file.getNextToken();
+
+    EXPECT_EQ(Token::T_EQUAL, data.m_token);
 }
 
+//TEST(Tokens, tokens_positions_test) {}
 
-TEST(Tokens, tokens_positions_test)
-{
-    
-}
+//TEST(Errors, all_errors_test) {}
 
-TEST(Errors, all_errors_test)
-{
-
-}
-
-int main(int argc, char* argv[], char* envp[]) 
-{
+int main(int argc, char* argv[], char* envp[]) {
     testing::InitGoogleTest(&argc, argv);
 
     return RUN_ALL_TESTS();

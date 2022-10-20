@@ -52,6 +52,7 @@ class Lexer {
     template <typename T> auto getValue() const -> const T;
 
     auto clearData() noexcept -> void;
+
   private:
     std::ifstream m_fstream;
     // Variable for store token metadata (token, value(C++ union), file ptr posiotion)
