@@ -1,6 +1,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <lexer.hpp>
+#include <iostream>
 
 using namespace lexer;
 
@@ -114,7 +115,29 @@ TEST(Tokens, symbols_test) {
     EXPECT_EQ(Token::T_EQUAL, data.m_token);
 }
 
-//TEST(Tokens, tokens_positions_test) {}
+TEST(Tokens, tokens_positions_test) {
+    Lexer file("tokens.txt");
+
+    EXPECT_EQ(file.operator bool(), true);
+
+    auto& data = file.getLastTokenData();
+
+    file.getNextToken();
+
+    EXPECT_EQ(0, data.m_file_ptr_pos);
+
+    file.getNextToken();
+
+    EXPECT_EQ(6, data.m_file_ptr_pos);
+
+    file.getNextToken();
+
+    EXPECT_EQ(12, data.m_file_ptr_pos);
+
+    file.getNextToken();
+
+    EXPECT_EQ(19, data.m_file_ptr_pos);
+}
 
 //TEST(Errors, all_errors_test) {}
 
