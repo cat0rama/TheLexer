@@ -1,7 +1,8 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <lexer.hpp>
 #include <iostream>
+#include <lexer.hpp>
+
 
 using namespace lexer;
 
@@ -41,10 +42,6 @@ TEST(Tokens, numbers_test) {
     file.getNextToken();
 
     EXPECT_DOUBLE_EQ(312.23343139, file.getValue<double>());
-
-    // проверка на равенство
-    // EXPECT_STREQ("ddw", "ddw"); // для строк
-    // EXPECT_EQ(2, 2 + 0); // для чисел
 }
 
 TEST(Tokens, nums_tokens_test) {
@@ -59,7 +56,7 @@ TEST(Tokens, nums_tokens_test) {
     EXPECT_EQ(Token::T_FUNC, data.m_token);
 
     file.getNextToken();
-    
+
     EXPECT_EQ(Token::T_EXTERN, data.m_token);
 
     file.getNextToken();
@@ -139,7 +136,19 @@ TEST(Tokens, tokens_positions_test) {
     EXPECT_EQ(19, data.m_file_ptr_pos);
 }
 
-//TEST(Errors, all_errors_test) {}
+TEST(Errors, all_errors_test) {
+    Lexer file("errors.343txt");
+
+    EXPECT_EQ(file.operator bool(), false);
+
+    file.openFile("errors.txt");
+
+    EXPECT_EQ(file.operator bool(), true);
+
+    file.getNextToken();
+
+    EXPECT_EQ(file.getLastTokenData().m_token, Token::T_ERROR);
+}
 
 int main(int argc, char* argv[], char* envp[]) {
     testing::InitGoogleTest(&argc, argv);
