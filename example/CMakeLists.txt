@@ -10,3 +10,6 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} PUBLIC Lexer)
 target_include_directories(${PROJECT_NAME} PUBLIC ../include)
+
+file(COPY example.txt
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Debug)
