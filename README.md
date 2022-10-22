@@ -13,4 +13,5 @@ The lexer is used to parse syntactic constructs. Usually a lexer is written for 
 # Run Tests
  ### `` From project directory:``
  ``1) cd build/tests/Debug``
+ 
  ``2) ./Tests``
