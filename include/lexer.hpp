@@ -73,7 +73,7 @@ template <typename T> auto Lexer::getValue() const -> const T {
     if constexpr ((std::is_integral_v<T> ||
                    std::is_floating_point_v<T>)) { // Check if type is number
         return static_cast<T>(
-            std::get<double>(m_token_data.m_data.value_or(0))); // Return type with cast
+            std::get<double>(m_token_data.m_data.value_or(0.0))); // Return type with cast
     } else {
         return std::get<std::string>(m_token_data.m_data.value_or("null")); // Else return string
     }
