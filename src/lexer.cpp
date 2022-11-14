@@ -41,6 +41,15 @@ auto Lexer::findKeyword(std::string& t_identifier) -> bool {
                 t_identifier.push_back(m_last_char); // Push identifier character
             }
         }
+        m_token_data.m_token = Token::T_IDENTIFIER;
+        m_token_data.m_file_ptr_pos = calculatePosition(m_identifier);
+        if (auto find_tok = g_identifiers_en.find(m_identifier);
+            find_tok != g_identifiers_en.end()) {
+            m_token_data.m_token = find_tok->second; // Get token from map
+        } else {
+            m_token_data.m_data =
+                std::move(m_identifier); // If token is identifier, we will save it
+        }
         return true;
     }
     return false;
@@ -57,13 +66,34 @@ auto Lexer::findNumber(std::string& t_identifier) -> bool {
             }
         }
         m_token_data.m_data = std::strtod(t_identifier.c_str(), nullptr); // String to double
+        m_token_data.m_token = Token::T_NUMBER;
+
+        if (std::count_if(m_identifier.begin(), m_identifier.end(),
+                          [](char c) { return c == '.'; }) > 1) // Count dots in string
+        {
+            m_token_data.m_data = "more than one point found. {0}"; // Error transmission
+            m_token_data.m_token =
+                Token::T_ERROR; // If find number with two and more points, return error
+            return true;
+        }
+        m_token_data.m_file_ptr_pos = calculatePosition(m_identifier);
+        return true;
+    }
+    return false;
+}
+
+// Find special symbol from map
+auto Lexer::findSymbol() noexcept -> bool {
+    if (auto token = g_symbols.find(m_last_char); token != g_symbols.end()) {
+        m_token_data.m_file_ptr_pos = calculatePosition((std::string() += m_last_char));
+        m_token_data.m_token = token->second;
         return true;
     }
     return false;
 }
 
 // Parse comment
-auto Lexer::findComment() -> bool {
+auto Lexer::findComment() noexcept -> bool {
     if (m_last_char == '/') { // Parse comment for skip it, but save read ptr position
         while ((m_next_char = m_fstream.peek()) != EOF && m_next_char != '\n' &&
                m_next_char != '\r') {
@@ -71,6 +101,7 @@ auto Lexer::findComment() -> bool {
                 m_fstream.get(); // Get symbol from file for skip it, but save file ptr position
             continue;
         }
+        m_token_data.m_token = Token::T_COMMENT;
         return true;
     }
     return false;
@@ -112,41 +143,21 @@ auto Lexer::getNextToken() -> Token {
         }
 
         if (findKeyword(m_identifier)) { // Parse keyword
-            auto find_tok = g_identifiers_en.find(m_identifier);
-            m_token_data.m_token = Token::T_IDENTIFIER;
-            m_token_data.m_file_ptr_pos = calculatePosition(m_identifier);
-            if (find_tok != g_identifiers_en.end()) {
-                m_token_data.m_token = find_tok->second; // Get token from map
-            } else {
-                m_token_data.m_data =
-                    std::move(m_identifier); // If token is identifier, we will save it
-            }
             return m_token_data
                 .m_token; // Return some word if token doesnt find else return IDENTIFIER
         }
 
-        auto find_sym = g_symbols.find(m_last_char); // Find specific symbols
-        if (find_sym != g_symbols.end()) {
-            m_token_data.m_file_ptr_pos = calculatePosition((std::string() += m_last_char));
-            return (m_token_data.m_token = find_sym->second);
+        if (findSymbol()) {
+            return m_token_data.m_token;
         }
 
         if (findNumber(m_identifier)) { // Parse number
-            m_token_data.m_token = Token::T_NUMBER;
-            if (std::count_if(m_identifier.begin(), m_identifier.end(),
-                              [](char c) { return c == '.'; }) > 1) // Count dots in string
-            {
-                m_token_data.m_data = "more than one point found. {0}"; // Error transmission
-                m_token_data.m_token =
-                    Token::T_ERROR; // If find number with two and more points, return error
-            }
-            m_token_data.m_file_ptr_pos = calculatePosition(m_identifier);
             return m_token_data.m_token;
         }
 
         if (findComment()) { // Parse comment for skip it, but save read ptr position
             clearData();
-            return (m_token_data.m_token = Token::T_COMMENT);
+            return m_token_data.m_token;
         }
     }
 

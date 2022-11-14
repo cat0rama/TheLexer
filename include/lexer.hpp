@@ -5,11 +5,17 @@
 #include "token.hpp"
 
 #include <fstream>
+#include <functional>
 #include <string>
+#include <vector>
+
 
 namespace lexer {
 // Lexer for parsing tokens from file.
 class Lexer {
+  public:
+    using error_handlers = std::vector<std::function<bool(std::string)>>;
+
   public:
     Lexer();
 
@@ -32,7 +38,9 @@ class Lexer {
 
     auto findNumber(std::string& t_identifier) -> bool;
 
-    auto findComment() -> bool;
+    auto findSymbol() noexcept -> bool;
+
+    auto findComment() noexcept -> bool;
 
   public:
     // Encapsulation of some ifstream methods
@@ -51,7 +59,11 @@ class Lexer {
 
     template <typename T> auto getValue() const -> const T;
 
+    // Clear m_token_data
     auto clearData() noexcept -> void;
+
+    // Method for load lambdas for parse string for some custom errors
+    auto loadErrorFunctions(const error_handlers& t_errors) -> bool;
 
   private:
     std::ifstream m_fstream;
@@ -61,6 +73,7 @@ class Lexer {
 
   public:
     // Variable that stores the last character
+    error_handlers m_error_func;
     char m_last_char;
 
   protected:
