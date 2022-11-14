@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\bigel\Desktop\TheLexer\CMakeFiles\6bf399b72b16f1830f2cba96098b7cf3\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{E2BD6546-DE5F-33DE-A1B3-D222D718DA43}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

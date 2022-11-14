@@ -67,15 +67,13 @@ auto Lexer::findNumber(std::string& t_identifier) -> bool {
         }
         m_token_data.m_data = std::strtod(t_identifier.c_str(), nullptr); // String to double
         m_token_data.m_token = Token::T_NUMBER;
-
-        if (std::count_if(m_identifier.begin(), m_identifier.end(),
-                          [](char c) { return c == '.'; }) > 1) // Count dots in string
-        {
-            m_token_data.m_data = "more than one point found. {0}"; // Error transmission
-            m_token_data.m_token =
-                Token::T_ERROR; // If find number with two and more points, return error
-            return true;
+    
+        for (const auto& fn : m_error_func) {
+            if(!fn(t_identifier, m_token_data)) {
+                return true;
+            }
         }
+
         m_token_data.m_file_ptr_pos = calculatePosition(m_identifier);
         return true;
     }
@@ -145,17 +143,11 @@ auto Lexer::getNextToken() -> Token {
         if (findKeyword(m_identifier)) { // Parse keyword
             return m_token_data
                 .m_token; // Return some word if token doesnt find else return IDENTIFIER
-        }
-
-        if (findSymbol()) {
+        } else if (findSymbol()) {
             return m_token_data.m_token;
-        }
-
-        if (findNumber(m_identifier)) { // Parse number
+        } else if (findNumber(m_identifier)) { // Parse number
             return m_token_data.m_token;
-        }
-
-        if (findComment()) { // Parse comment for skip it, but save read ptr position
+        } else if (findComment()) { // Parse comment for skip it, but save read ptr position
             clearData();
             return m_token_data.m_token;
         }
@@ -173,6 +165,13 @@ auto Lexer::getLastTokenData() const -> const TokenData& {
 auto Lexer::clearData() noexcept -> void {
     m_token_data.m_file_ptr_pos = 0;
     m_token_data.m_data = {};
+}
+
+auto Lexer::loadErrorFunctions(const error_handlers& t_errors) -> void
+{
+    for (const auto& fn : t_errors) {
+        m_error_func.push_back(fn);
+    }
 }
 
 } // namespace lexer

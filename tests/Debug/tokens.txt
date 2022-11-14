@@ -1,0 +1,4 @@
+func
+name
+string age
+extern return

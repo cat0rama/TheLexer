@@ -9,12 +9,13 @@
 #include <string>
 #include <vector>
 
+using namespace std::string_literals;
 
 namespace lexer {
 // Lexer for parsing tokens from file.
 class Lexer {
   public:
-    using error_handlers = std::vector<std::function<bool(std::string)>>;
+    using error_handlers = std::vector<std::function<bool(std::string&, TokenData&)>>;
 
   public:
     Lexer();
@@ -63,7 +64,7 @@ class Lexer {
     auto clearData() noexcept -> void;
 
     // Method for load lambdas for parse string for some custom errors
-    auto loadErrorFunctions(const error_handlers& t_errors) -> bool;
+    auto loadErrorFunctions(const error_handlers& t_errors) -> void;
 
   private:
     std::ifstream m_fstream;
