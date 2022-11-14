@@ -1,15 +1,15 @@
+#include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <lexer.hpp>
 #include <logger.hpp>
 #include <type_traits>
-#include <algorithm>
+
 
 using namespace lexer;
 
 class ExampleParser : public Lexer {
   public:
-
     ExampleParser(std::string t_file_name) : Lexer(t_file_name) {}
     ~ExampleParser() = default;
 
@@ -89,15 +89,14 @@ class ExampleParser : public Lexer {
 
 int main(int argc, char* argv[], char* envp[]) {
     ExampleParser example("example.txt");
-    
+
     // Load functions which check some errors
     example.loadErrorFunctions({[](std::string& str, TokenData& data) -> bool {
-        if (std::count_if(str.begin(), str.end(),
-                          [](char c) { return c == '.'; }) > 1) // Count dots in string
+        if (std::count_if(str.begin(), str.end(), [](char c) { return c == '.'; }) >
+            1) // Count dots in string
         {
             data.m_data = "more than one point found. {0}"s; // Error transmission
-            data.m_token =
-                Token::T_ERROR; // If find number with two and more points, return error
+            data.m_token = Token::T_ERROR; // If find number with two and more points, return error
             return false;
         }
         return true;

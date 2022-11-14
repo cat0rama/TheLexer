@@ -137,16 +137,15 @@ TEST(Tokens, tokens_positions_test) {
 
 TEST(Errors, all_errors_test) {
     using namespace std::string_literals;
-    
+
     Lexer file("errors.343txt");
 
     file.loadErrorFunctions({[](std::string& str, TokenData& data) -> bool {
-        if (std::count_if(str.begin(), str.end(),
-                          [](char c) { return c == '.'; }) > 1) // Count dots in string
+        if (std::count_if(str.begin(), str.end(), [](char c) { return c == '.'; }) >
+            1) // Count dots in string
         {
             data.m_data = "more than one point found. {0}"s; // Error transmission
-            data.m_token =
-                Token::T_ERROR; // If find number with two and more points, return error
+            data.m_token = Token::T_ERROR; // If find number with two and more points, return error
             return false;
         }
         return true;
@@ -161,8 +160,6 @@ TEST(Errors, all_errors_test) {
     file.getNextToken();
 
     EXPECT_EQ(file.getLastTokenData().m_token, Token::T_ERROR);
-    
-    std::cout << file.getValue<std::string>() << std::endl;
 }
 
 int main(int argc, char* argv[], char* envp[]) {

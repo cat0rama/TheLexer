@@ -67,9 +67,9 @@ auto Lexer::findNumber(std::string& t_identifier) -> bool {
         }
         m_token_data.m_data = std::strtod(t_identifier.c_str(), nullptr); // String to double
         m_token_data.m_token = Token::T_NUMBER;
-    
+
         for (const auto& fn : m_error_func) {
-            if(!fn(t_identifier, m_token_data)) {
+            if (!fn(t_identifier, m_token_data)) {
                 break;
             }
         }
@@ -167,8 +167,7 @@ auto Lexer::clearData() noexcept -> void {
     m_token_data.m_data = {};
 }
 
-auto Lexer::loadErrorFunctions(const error_handlers& t_errors) -> void
-{
+auto Lexer::loadErrorFunctions(const error_handlers& t_errors) -> void {
     for (const auto& fn : t_errors) {
         m_error_func.push_back(fn);
     }
