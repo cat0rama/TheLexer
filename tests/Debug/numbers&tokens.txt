@@ -1,4 +1,0 @@
-func extern
-name 3943.348
-hellow 94
-age privet

@@ -70,7 +70,7 @@ auto Lexer::findNumber(std::string& t_identifier) -> bool {
     
         for (const auto& fn : m_error_func) {
             if(!fn(t_identifier, m_token_data)) {
-                return true;
+                break;
             }
         }
 

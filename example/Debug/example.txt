@@ -1,2 +1,0 @@
-name = Alex
-age = 34.3.43
