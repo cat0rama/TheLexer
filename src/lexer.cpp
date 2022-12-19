@@ -138,9 +138,7 @@ auto Lexer::getNextToken() -> Token {
         m_last_char = m_fstream.get();
         if (std::isspace(m_last_char)) { // Skip space
             continue;
-        }
-
-        if (findKeyword(m_identifier)) { // Parse keyword
+        } else if (findKeyword(m_identifier)) { // Parse keyword
             return m_token_data
                 .m_token; // Return some word if token doesnt find else return IDENTIFIER
         } else if (findSymbol()) {
